@@ -1,6 +1,9 @@
 # Working Dir
 export WORKING_DIR=/share/ivirus/dhermos
 
+# Containers
+
+
 # Logs Dir
 export LOGS_DIR=./logs/
 
@@ -21,4 +24,5 @@ export TRIMMED_READ=$TRIM_DIR/trimmed_reads
 export U
 
 # Contam Removal
+export HUM_DB=/rs1/researchers/b/blhurwit/data/databases/hum_db
 export CONTAM_DIR=$WORKING_DIR/04_Bowtie2/
