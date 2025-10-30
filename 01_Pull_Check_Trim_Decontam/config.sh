@@ -14,8 +14,8 @@ export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
 
 # ---- Directory Structure ----
 # 00 Working Dir & Run Scripts
-export WORKING_DIR=/share/ivirus/dhermos/metagenome_test
-export RUN_SCRIPTS=$WORKING_DIR/run_scripts
+export WORKING_DIR=/share/ivirus/dhermos/metagenome_test # where I want all the output to go
+export RUN_SCRIPTS=/share/ivirus/dhermos/Metagenomics_Pipeline_LSF/01_Pull_Check_Trim_Decontam/run_scripts # where the pipeline & run scripts are stored
 # 01 Reads Dir (SRA Toolkit output)
 export READS_DIR=$WORKING_DIR/01_SRA_TOOLKIT
 export SRA_LOGS_O=$READS_DIR/out/
