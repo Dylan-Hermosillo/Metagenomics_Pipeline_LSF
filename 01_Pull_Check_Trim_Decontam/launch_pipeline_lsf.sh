@@ -58,7 +58,7 @@ bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
     -q $JOB2_QUEUE \
     -R "rusage[mem=$JOB2_MEMORY]" \
     -W $JOB2_TIME \
-    -w "done($JOB1)" \
+    -w "done(${JOB1})" \
     -o "${SRA_LOGS_O}/output.01B.%J_%I.log" \
     -e "${SRA_LOGS_E}/error.01B.%J_%I.log \
     < $RUN_SCRIPTS/$JOB2
@@ -69,7 +69,7 @@ bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -q $JOB3_QUEUE \
     -R "rusage[mem=$JOB3_MEMORY]" \
     -W $JOB3_TIME \
-    -w "done($JOB2)" \
+    -w "done(${JOB2})" \
     -o "${FASTQC_LOGS_O}/output.01A.%J_%I.log" \
     -e "${FASTQC_LOGS_E}/error.01A.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB3
@@ -80,7 +80,7 @@ bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -q $JOB4_QUEUE \
     -R "rusage[mem=$JOB4_MEMORY]" \
     -W $JOB4_TIME \
-    -w "done($JOB3)" \
+    -w "done(${JOB3})" \
     -o "${TRIM_LOGS_O}/output.03.%J_%I.log" \
     -e "${TRIM_LOGS_E}/error.03.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB4
@@ -91,7 +91,7 @@ bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
     -q $JOB5_QUEUE \
     -R "rusage[mem=$JOB5_MEMORY]" \
     -W $JOB5_TIME \
-    -w "done($JOB4)" \
+    -w "done(${JOB4})" \
     -o "${CONTAM_LOGS_O}/output.04.%J_%I.log" \
     -e "${CONTAM_LOGS_E}/error.04.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB5
@@ -102,7 +102,7 @@ bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -q $JOB6_QUEUE \
     -R "rusage[mem=$JOB6_MEMORY]" \
     -W $JOB6_TIME \
-    -w "done($JOB4)" \
+    -w "done(${JOB4})" \
     -o "${FASTQC_AFTER_LOGS_O}/output.01A.%J_%I.log" \
     -e "${FASTQC_AFTER_LOGS_E}/error.01A.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB6    
