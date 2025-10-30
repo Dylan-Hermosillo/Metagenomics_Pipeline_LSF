@@ -1,4 +1,10 @@
 #! /bin/bash
+#BSUB -n 1
+#BSUB -W 12:00
+#BSUB -q "shared_memory"
+#BSUB -J launch_pipeline_lsf
+#BSUB -o launch_pipeline_lsf.%J.out
+#BSUB -e launch_pipeline_lsf.%J.err
 
 # NOTE: MAKE ALL PARAMETER CHANGES IN THE CONFIG.SH FILE!!!
 
