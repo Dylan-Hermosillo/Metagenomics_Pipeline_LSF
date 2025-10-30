@@ -11,6 +11,9 @@
 # --- Housekeeping ---
 # load config
 source ./config.sh
+# Redirect launcher logs
+exec > "${WORKING_DIR}/launch_pipeline_lsf.${LSB_JOBID}.out"
+exec 2> "${WORKING_DIR}/launch_pipeline_lsf.${LSB_JOBID}.err"
 # get sample list & export number of samples
 if [[ ! -f ${XFILE} ]]; then
     echo "Sample list file ${XFILE} not found!"
