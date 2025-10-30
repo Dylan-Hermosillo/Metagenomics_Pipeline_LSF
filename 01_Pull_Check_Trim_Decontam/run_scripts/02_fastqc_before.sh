@@ -8,6 +8,7 @@
 # Log info
 pwd; hostname; date
 source ./config.sh
+
 # Initialize Parameters
 JOBINDEX=$(($LSB_JOBINDEX -1))
 names=($(cat ${XFILE}))

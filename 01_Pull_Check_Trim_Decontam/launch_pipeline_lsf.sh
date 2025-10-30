@@ -21,6 +21,7 @@ if [[ ! -f ${XFILE} ]]; then
 fi
 # get number of jobs
 export NUM_JOB=$(wc -l < "${XFILE}")
+echo $NUM_JOB "jobs to be launched."
 # --- End Housekeeping ---
 
 # --- Create File Structure ---
@@ -47,6 +48,8 @@ bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
     -q $JOB1_QUEUE \
     -R "rusage[mem=$JOB1_MEMORY]" \
     -W $JOB1_TIME \
+    -o "${SRA_LOGS_O}/output.01A.%J_%I.log" \
+    -e "${SRA_LOGS_E}/error.01A.%J_%I.log
     < $RUN_SCRIPTS/$JOB1
 # Job 2: SRA Dump
 echo "Launching Job 2: SRA Dump"
@@ -56,6 +59,8 @@ bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB2_MEMORY]" \
     -W $JOB2_TIME \
     -w "done($JOB1)" \
+    -o "${SRA_LOGS_O}/output.01B.%J_%I.log" \
+    -e "${SRA_LOGS_E}/error.01B.%J_%I.log \
     < $RUN_SCRIPTS/$JOB2
 # Job 3: FastQC Before Trim
 echo "Launching Job 3: FastQC Before Trim"
@@ -65,6 +70,8 @@ bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB3_MEMORY]" \
     -W $JOB3_TIME \
     -w "done($JOB2)" \
+    -o "${FASTQC_LOGS_O}/output.01A.%J_%I.log" \
+    -e "${FASTQC_LOGS_E}/error.01A.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB3
 # Job 4: Trimmomatic
 echo "Launching Job 4: Trimmomatic"
@@ -74,6 +81,8 @@ bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB4_MEMORY]" \
     -W $JOB4_TIME \
     -w "done($JOB3)" \
+    -o "${TRIM_LOGS_O}/output.03.%J_%I.log" \
+    -e "${TRIM_LOGS_E}/error.03.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB4
 # Job 5: Bowtie2 Decontamination
 echo "Launching Job 5: Bowtie2 Decontamination"
@@ -83,6 +92,8 @@ bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB5_MEMORY]" \
     -W $JOB5_TIME \
     -w "done($JOB4)" \
+    -o "${CONTAM_LOGS_O}/output.04.%J_%I.log" \
+    -e "${CONTAM_LOGS_E}/error.04.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB5
 # Job 6: FastQC After Trim
 echo "Launching Job 6: FastQC After Trim"
@@ -92,5 +103,7 @@ bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB6_MEMORY]" \
     -W $JOB6_TIME \
     -w "done($JOB4)" \
+    -o "${FASTQC_AFTER_LOGS_O}/output.01A.%J_%I.log" \
+    -e "${FASTQC_AFTER_LOGS_E}/error.01A.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB6    
 # --- End Launch Pipeline Steps ---
