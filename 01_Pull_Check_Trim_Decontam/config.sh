@@ -8,14 +8,14 @@ export BOWTIE2=$CONT/quay.io_biocontainers_bowtie2:2.5.4--he96a11b_6.sif
 # Files -- change this txt to a list of your SRR/ERR id's
 export XFILE=$WORKING_DIR/share/ivirus/dhermos/Metagenomics_Pipeline_LSF/01_Pull_Check_Trim_Decontam/test_data/test_data.txt
 # Reference Genome for Decontamination
-export $REF_DB=/rs1/shares/brc/admin/databases/hum_db
+export REF_DB=/rs1/shares/brc/admin/databases/hum_db
 # Adapter File for Trimmomatic
 export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
 
 # ---- Directory Structure ----
 # 00 Working Dir & Run Scripts
 export WORKING_DIR=/share/ivirus/dhermos/metagenome_test
-export RUN_SCRIPTS=$WORKING_DIR/run_scripts/
+export RUN_SCRIPTS=$WORKING_DIR/run_scripts
 # 01 Reads Dir (SRA Toolkit output)
 export READS_DIR=$WORKING_DIR/01_SRA_TOOLKIT
 export SRA_LOGS_O=$READS_DIR/out/
