@@ -14,7 +14,7 @@ export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
 
 # ---- Directory Structure ----
 # 00 Working Dir & Run Scripts
-export WORKING_DIR=/share/ivirus/dhermos
+export WORKING_DIR=/share/ivirus/dhermos/metagenome_test
 export RUN_SCRIPTS=$WORKING_DIR/run_scripts/
 # 01 Reads Dir (SRA Toolkit output)
 export READS_DIR=$WORKING_DIR/01_SRA_TOOLKIT
