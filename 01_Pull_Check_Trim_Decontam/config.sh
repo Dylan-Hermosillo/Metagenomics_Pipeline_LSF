@@ -13,6 +13,12 @@ export REF_DB=/rs1/shares/brc/admin/databases/hum_db
 export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
 
 # ---- Directory Structure ----
+
+# 1) Change 00 WORKING_DIR
+# 2) Define where RUN_SCRIPTS are located
+# The rest 01-05 will automatically create the file structure without having to edit anything
+# Here I separate my working dir from the pipeline directory, for example.
+
 # 00 Working Dir & Run Scripts
 export WORKING_DIR=/share/ivirus/dhermos/metagenome_test # where I want all the output to go
 export RUN_SCRIPTS=/share/ivirus/dhermos/Metagenomics_Pipeline_LSF/01_Pull_Check_Trim_Decontam/run_scripts # where the pipeline & run scripts are stored

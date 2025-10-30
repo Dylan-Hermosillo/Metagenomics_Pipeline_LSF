@@ -48,8 +48,8 @@ bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB1_MEMORY]" \
     -W $JOB1_TIME \
     -o "${SRA_LOGS_O}/output.01A.%J_%I.log" \
-    -e "${SRA_LOGS_E}/error.01A.%J_%I.log"
-    < $RUN_SCRIPTS/$JOB1
+    -e "${SRA_LOGS_E}/error.01A.%J_%I.log" \
+    < $RUN_SCRIPTS/${JOB1}.sh
 # Job 2: SRA Dump
 echo "Launching Job 2: SRA Dump"
 bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
@@ -60,7 +60,7 @@ bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
     -w "done(${JOB1})" \
     -o "${SRA_LOGS_O}/output.01B.%J_%I.log" \
     -e "${SRA_LOGS_E}/error.01B.%J_%I.log" \
-    < $RUN_SCRIPTS/$JOB2
+    < $RUN_SCRIPTS/${JOB2}.sh
 # Job 3: FastQC Before Trim
 echo "Launching Job 3: FastQC Before Trim"
 bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
@@ -71,7 +71,7 @@ bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -w "done(${JOB2})" \
     -o "${FASTQC_LOGS_O}/output.01A.%J_%I.log" \
     -e "${FASTQC_LOGS_E}/error.01A.%J_%I.log" \
-    < $RUN_SCRIPTS/$JOB3
+    < $RUN_SCRIPTS/${JOB3}.sh
 # Job 4: Trimmomatic
 echo "Launching Job 4: Trimmomatic"
 bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
@@ -82,7 +82,7 @@ bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -w "done(${JOB3})" \
     -o "${TRIM_LOGS_O}/output.03.%J_%I.log" \
     -e "${TRIM_LOGS_E}/error.03.%J_%I.log" \
-    < $RUN_SCRIPTS/$JOB4
+    < $RUN_SCRIPTS/${JOB4}.sh
 # Job 5: Bowtie2 Decontamination
 echo "Launching Job 5: Bowtie2 Decontamination"
 bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
@@ -93,7 +93,7 @@ bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
     -w "done(${JOB4})" \
     -o "${CONTAM_LOGS_O}/output.04.%J_%I.log" \
     -e "${CONTAM_LOGS_E}/error.04.%J_%I.log" \
-    < $RUN_SCRIPTS/$JOB5
+    < $RUN_SCRIPTS/${JOB5}.sh
 # Job 6: FastQC After Trim
 echo "Launching Job 6: FastQC After Trim"
 bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
@@ -104,5 +104,5 @@ bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -w "done(${JOB4})" \
     -o "${FASTQC_AFTER_LOGS_O}/output.01A.%J_%I.log" \
     -e "${FASTQC_AFTER_LOGS_E}/error.01A.%J_%I.log" \
-    < $RUN_SCRIPTS/$JOB6    
+    < $RUN_SCRIPTS/${JOB6}.sh
 # --- End Launch Pipeline Steps ---
