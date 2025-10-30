@@ -43,12 +43,12 @@ export FASTQC_AFTER_LOGS_E=$FASTQC_AFTER/err/
 
 # --- Job Parameters ---
 # List of Jobs to run
-export JOB1="01A_sra_prefetch.sh"
-export JOB2="01B_sra_dump.sh"
-export JOB3="02_fastqc_before.sh"
-export JOB4="03_trimmomatic.sh"
-export JOB5="04_bowtie2.sh"
-export JOB6="05_fastqc_after.sh"
+export JOB1="01A_sra_prefetch"
+export JOB2="01B_sra_dump"
+export JOB3="02_fastqc_before"
+export JOB4="03_trimmomatic"
+export JOB5="04_bowtie2"
+export JOB6="05_fastqc_after"
 # 01 SRA Prefetch
 export JOB1_CPUS=1
 export JOB1_QUEUE="shared_memory"

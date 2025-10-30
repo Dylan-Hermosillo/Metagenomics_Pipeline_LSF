@@ -11,6 +11,8 @@
 # --- Housekeeping ---
 # load config
 source ./config.sh
+# Working Dir
+mkdir -p "${WORKING_DIR}"
 # Redirect launcher logs
 exec > "${WORKING_DIR}/launch_pipeline_lsf.${LSB_JOBID}.out"
 exec 2> "${WORKING_DIR}/launch_pipeline_lsf.${LSB_JOBID}.err"
@@ -25,9 +27,6 @@ echo $NUM_JOB "jobs to be launched."
 # --- End Housekeeping ---
 
 # --- Create File Structure ---
-# 00 Working Dir (should be made already and have the xfile inside...
-# but if the SRR/ERR ids are elsewhere, create working dir)
-create_dir $WORKING_DIR
 # 01 Reads Dir (SRA Toolkit output)
 create_dir $READS_DIR $SRA_LOGS_O $SRA_LOGS_E
 # 02 FastQC Before Trim Outputs
@@ -49,7 +48,7 @@ bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB1_MEMORY]" \
     -W $JOB1_TIME \
     -o "${SRA_LOGS_O}/output.01A.%J_%I.log" \
-    -e "${SRA_LOGS_E}/error.01A.%J_%I.log
+    -e "${SRA_LOGS_E}/error.01A.%J_%I.log"
     < $RUN_SCRIPTS/$JOB1
 # Job 2: SRA Dump
 echo "Launching Job 2: SRA Dump"
@@ -60,7 +59,7 @@ bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB2_TIME \
     -w "done(${JOB1})" \
     -o "${SRA_LOGS_O}/output.01B.%J_%I.log" \
-    -e "${SRA_LOGS_E}/error.01B.%J_%I.log \
+    -e "${SRA_LOGS_E}/error.01B.%J_%I.log" \
     < $RUN_SCRIPTS/$JOB2
 # Job 3: FastQC Before Trim
 echo "Launching Job 3: FastQC Before Trim"
