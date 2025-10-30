@@ -6,7 +6,7 @@ export FASTQC=$CONT/quay.io_biocontainers_fastqc:0.12.1--hdfd78af_0.sif
 export TRIMMOMATIC=$CONT/quay.io_biocontainers_trimmomatic:0.40--hdfd78af_0.sif
 export BOWTIE2=$CONT/quay.io_biocontainers_bowtie2:2.5.4--he96a11b_6.sif
 # Files -- change this txt to a list of your SRR/ERR id's
-export XFILE=$WORKING_DIR/project1_ids.txt
+export XFILE=$WORKING_DIR/share/ivirus/dhermos/Metagenomics_Pipeline_LSF/01_Pull_Check_Trim_Decontam/test_data/test_data.txt
 # Reference Genome for Decontamination
 export $REF_DB=/rs1/shares/brc/admin/databases/hum_db
 # Adapter File for Trimmomatic
