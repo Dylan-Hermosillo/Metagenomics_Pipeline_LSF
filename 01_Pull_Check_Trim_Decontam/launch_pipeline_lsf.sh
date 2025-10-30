@@ -11,11 +11,8 @@
 # --- Housekeeping ---
 # load config
 source ./config.sh
-# Working Dir
-mkdir -p "${WORKING_DIR}"
-# Redirect launcher logs
-exec > "${WORKING_DIR}/launch_pipeline_lsf.${LSB_JOBID}.out"
-exec 2> "${WORKING_DIR}/launch_pipeline_lsf.${LSB_JOBID}.err"
+# Working Dir -- should be made already but just in case...
+create_dir $WORKING_DIR
 # get sample list & export number of samples
 if [[ ! -f ${XFILE} ]]; then
     echo "Sample list file ${XFILE} not found!"
@@ -73,8 +70,8 @@ JOBID3=$(bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB3_MEMORY]" \
     -W $JOB3_TIME \
     -w "done($JOBID2)" \
-    -o "${FASTQC_LOGS_O}/output.01A.%J_%I.log" \
-    -e "${FASTQC_LOGS_E}/error.01A.%J_%I.log" \
+    -o "${FASTQC_LOGS_O}/output.02.%J_%I.log" \
+    -e "${FASTQC_LOGS_E}/error.02.%J_%I.log" \
     < $RUN_SCRIPTS/${JOB3}.sh | awk '{print $2}' | tr -d '<>')
 echo "Submitted Job 3 array with ID $JOBID3"
 
@@ -112,8 +109,8 @@ JOBID6=$(bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -R "rusage[mem=$JOB6_MEMORY]" \
     -W $JOB6_TIME \
     -w "done($JOBID4)" \
-    -o "${FASTQC_AFTER_LOGS_O}/output.01A.%J_%I.log" \
-    -e "${FASTQC_AFTER_LOGS_E}/error.01A.%J_%I.log" \
+    -o "${FASTQC_AFTER_LOGS_O}/output.05.%J_%I.log" \
+    -e "${FASTQC_AFTER_LOGS_E}/error.05.%J_%I.log" \
     < $RUN_SCRIPTS/${JOB6}.sh | awk '{print $2}' | tr -d '<>')
 echo "Submitted Job 6 array with ID $JOBID6"
 # --- End Launch Pipeline Steps ---
