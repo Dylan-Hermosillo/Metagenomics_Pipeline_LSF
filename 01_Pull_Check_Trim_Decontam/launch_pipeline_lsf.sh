@@ -46,7 +46,7 @@ JOBID1=$(bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB1_TIME \
     -o "${SRA_LOGS_O}/output.01A.%J_%I.log" \
     -e "${SRA_LOGS_E}/error.01A.%J_%I.log" \
-    < $RUN_SCRIPTS/${JOB1}.sh | awk '{print $2}' | tr -d '<>')
+    < $RUN_SCRIPTS/${JOB1}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 1 array with ID $JOBID1"
 
 # Job 2: SRA Dump
@@ -59,7 +59,7 @@ JOBID2=$(bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
     -w "done($JOBID1)" \
     -o "${SRA_LOGS_O}/output.01B.%J_%I.log" \
     -e "${SRA_LOGS_E}/error.01B.%J_%I.log" \
-    < $RUN_SCRIPTS/${JOB2}.sh | awk '{print $2}' | tr -d '<>')
+    < $RUN_SCRIPTS/${JOB2}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 2 array with ID $JOBID2"
 
 # Job 3: FastQC Before Trim
@@ -72,7 +72,7 @@ JOBID3=$(bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -w "done($JOBID2)" \
     -o "${FASTQC_LOGS_O}/output.02.%J_%I.log" \
     -e "${FASTQC_LOGS_E}/error.02.%J_%I.log" \
-    < $RUN_SCRIPTS/${JOB3}.sh | awk '{print $2}' | tr -d '<>')
+    < $RUN_SCRIPTS/${JOB3}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 3 array with ID $JOBID3"
 
 # Job 4: Trimmomatic
@@ -85,7 +85,7 @@ JOBID4=$(bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -w "done($JOBID3)" \
     -o "${TRIM_LOGS_O}/output.03.%J_%I.log" \
     -e "${TRIM_LOGS_E}/error.03.%J_%I.log" \
-    < $RUN_SCRIPTS/${JOB4}.sh | awk '{print $2}' | tr -d '<>')
+    < $RUN_SCRIPTS/${JOB4}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 4 array with ID $JOBID4"
 
 # Job 5: Bowtie2 Decontamination
@@ -98,7 +98,7 @@ JOBID5=$(bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
     -w "done($JOBID4)" \
     -o "${CONTAM_LOGS_O}/output.04.%J_%I.log" \
     -e "${CONTAM_LOGS_E}/error.04.%J_%I.log" \
-    < $RUN_SCRIPTS/${JOB5}.sh | awk '{print $2}' | tr -d '<>')
+    < $RUN_SCRIPTS/${JOB5}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 5 array with ID $JOBID5"
 
 # Job 6: FastQC After Trim
@@ -111,7 +111,7 @@ JOBID6=$(bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -w "done($JOBID4)" \
     -o "${FASTQC_AFTER_LOGS_O}/output.05.%J_%I.log" \
     -e "${FASTQC_AFTER_LOGS_E}/error.05.%J_%I.log" \
-    < $RUN_SCRIPTS/${JOB6}.sh | awk '{print $2}' | tr -d '<>')
+    < $RUN_SCRIPTS/${JOB6}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 6 array with ID $JOBID6"
 # --- End Launch Pipeline Steps ---
 echo "All jobs submitted successfully!"
