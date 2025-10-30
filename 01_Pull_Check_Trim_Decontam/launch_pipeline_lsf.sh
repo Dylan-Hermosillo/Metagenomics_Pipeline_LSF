@@ -39,7 +39,7 @@ create_dir $CONTAM_DIR $CONTAM_LOGS_O $CONTAM_LOGS_E
 # --- Launch Pipeline Steps ---
 # Job 1: SRA Prefetch
 echo "Launching Job 1: SRA Prefetch"
-bsub -J "$JOB1[1-$NUM_JOB]%NUM_JOB" \
+bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB1_CPUS \
     -q $JOB1_QUEUE \
     -R "rusage[mem=$JOB1_MEMORY]" \
@@ -47,7 +47,7 @@ bsub -J "$JOB1[1-$NUM_JOB]%NUM_JOB" \
     < $RUN_SCRIPTS/$JOB1
 # Job 2: SRA Dump
 echo "Launching Job 2: SRA Dump"
-bsub -J "$JOB2[1-$NUM_JOB]%NUM_JOB" \
+bsub -J "$JOB2[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB2_CPUS \
     -q $JOB2_QUEUE \
     -R "rusage[mem=$JOB2_MEMORY]" \
@@ -56,7 +56,7 @@ bsub -J "$JOB2[1-$NUM_JOB]%NUM_JOB" \
     < $RUN_SCRIPTS/$JOB2
 # Job 3: FastQC Before Trim
 echo "Launching Job 3: FastQC Before Trim"
-bsub -J "$JOB3[1-$NUM_JOB]%NUM_JOB" \
+bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB3_CPUS \
     -q $JOB3_QUEUE \
     -R "rusage[mem=$JOB3_MEMORY]" \
@@ -65,7 +65,7 @@ bsub -J "$JOB3[1-$NUM_JOB]%NUM_JOB" \
     < $RUN_SCRIPTS/$JOB3
 # Job 4: Trimmomatic
 echo "Launching Job 4: Trimmomatic"
-bsub -J "$JOB4[1-$NUM_JOB]%NUM_JOB" \
+bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB4_CPUS \
     -q $JOB4_QUEUE \
     -R "rusage[mem=$JOB4_MEMORY]" \
@@ -74,7 +74,7 @@ bsub -J "$JOB4[1-$NUM_JOB]%NUM_JOB" \
     < $RUN_SCRIPTS/$JOB4
 # Job 5: Bowtie2 Decontamination
 echo "Launching Job 5: Bowtie2 Decontamination"
-bsub -J "$JOB5[1-$NUM_JOB]%NUM_JOB" \
+bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB5_CPUS \
     -q $JOB5_QUEUE \
     -R "rusage[mem=$JOB5_MEMORY]" \
@@ -83,7 +83,7 @@ bsub -J "$JOB5[1-$NUM_JOB]%NUM_JOB" \
     < $RUN_SCRIPTS/$JOB5
 # Job 6: FastQC After Trim
 echo "Launching Job 6: FastQC After Trim"
-bsub -J "$JOB6[1-$NUM_JOB]%NUM_JOB" \
+bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB6_CPUS \
     -q $JOB6_QUEUE \
     -R "rusage[mem=$JOB6_MEMORY]" \
