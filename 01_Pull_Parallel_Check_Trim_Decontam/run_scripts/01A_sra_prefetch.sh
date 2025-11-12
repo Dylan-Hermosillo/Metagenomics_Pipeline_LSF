@@ -3,7 +3,7 @@
 #BSUB -o "${SRA_LOGS_O}/output.01A.%J_%I.log""
 #BSUB -e "${SRA_LOGS_E}/error.01A.%J_%I.log"
 
-# This script runs the READS_DIR Toolkit to prefetch READS_DIR files
+# This script runs the SRA Toolkit to prefetch SRA files
 
 # Log info
 pwd; hostname; date
@@ -14,6 +14,6 @@ JOBINDEX=$(($LSB_JOBINDEX -1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 
-# Run READS_DIR Prefetch
+# Run SRA Prefetch
 module load apptainer
 apptainer exec $SRA_TOOLKIT prefetch $NAME -O $READS_DIR
