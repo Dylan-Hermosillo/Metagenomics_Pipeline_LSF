@@ -26,7 +26,7 @@ apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES
     metaspades.py \
     -1 $PAIR1 \
     -2 $PAIR2 \
-    -o $METASPADES_DIR \
+    -o $METASPADES_DIR/${NAME} \
     --threads $JOB7B_CPUS \
     --memory $JOB7B_MEMORY_GB
 
