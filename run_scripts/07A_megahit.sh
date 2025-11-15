@@ -26,7 +26,7 @@ apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${MEGAHIT_DIR}:${MEGAHIT_DIR} 
     megahit \
     -1 $PAIR1 \
     -2 $PAIR2 \
-    -o $MEGAHIT_DIR \
+    -o $MEGAHIT_DIR/${NAME} \
     --num-cpu-threads $JOB7A_CPUS \
     --memory $JOB7A_MEMORY_GB
 
