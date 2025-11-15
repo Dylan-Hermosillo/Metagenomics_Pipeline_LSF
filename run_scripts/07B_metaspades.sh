@@ -22,11 +22,11 @@ PAIR2=${CONTAM_DIR}/${NAME}_2.fastq.gz
 
 # Run metaSPAdes
 module load apptainer
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES_DIR} $METASPADES \
+apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES_DIR} $SPADES \
     metaspades.py \
     -1 $PAIR1 \
     -2 $PAIR2 \
-    -o $METASPADES_OUT \
+    -o $METASPADES_DIR \
     --threads $JOB7B_CPUS \
     --memory $JOB7B_MEMORY_GB
 
