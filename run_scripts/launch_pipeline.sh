@@ -228,7 +228,7 @@ JOBID9B=$(bsub -J "$JOB9B" \
     -q $JOB9B_QUEUE \
     -R "rusage[mem=$JOB9B_MEMORY]" \
     -W $JOB9B_TIME \
-    -w "done($JOBID9A1) && done($JOBID9A2)"  \ # ensure both 9A1 and 9A2 are done
+    -w "done($JOBID9A1) && done($JOBID9A2)" \
     -o "${CONCOCT_LOGS_O}/add_bin_nums.09B.%J.log" \
     -e "${CONCOCT_LOGS_E}/add_bin_nums.09B.%J.err" \
     < $RUN_SCRIPTS/${JOB9B}.sh | awk '{print $2}' | tr -d '<>[]')
