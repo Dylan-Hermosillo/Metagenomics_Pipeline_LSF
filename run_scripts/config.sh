@@ -18,21 +18,18 @@ export BRACKEN=$CONT/quay.io_biocontainers_bracken:3.1--h9948957_0.sif
 export KRAKENTOOLS=$CONT/quay.io_biocontainers_krakentools:1.2--pyh5e36f6f_0.sif
 
 # Working Dir & Run Scripts
-export WORKING_DIR=/share/ivirus/dhermos/metagenome_test # where I want all the output to go
+export WORKING_DIR=/share/ivirus/dhermos/pipeline_test # where I want all the output to go
 export RUN_SCRIPTS=$WORKING_DIR/run_scripts
 
 # Files -- change this txt to a list of your SRR/ERR id's
-export XFILE=$WORKING_DIR/test_data/test_data_2.txt
-# Reference Genome for Decontamination
-export REF_DB=/rs1/shares/brc/admin/databases/hum_db/chm13v2.0_index
-# Adapter File for Trimmomatic
-export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
+export XFILE=$WORKING_DIR/test_data/test_data.txt
 
 # Database paths (update these to your actual database locations)
 export DB="/rs1/shares/brc/admin/databases"
+export REF_DB=/rs1/shares/brc/admin/databases/hum_db/chm13v2.0_index
+export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
 export CHECKM2_DB=$DB/CheckM2_database/uniref100.KO.1.dmnd
 export KRAKEN2_DB=$DB/kraken2
-export KRAKEN2_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
 
 # ---- Directory Structure ----
 
@@ -237,6 +234,7 @@ export JOB10A_CPUS=24
 export JOB10A_QUEUE="${QUEUE}"
 export JOB10A_MEMORY="64000"
 export JOB10A_TIME="08:00"
+export KRAKEN2_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
 # 10B Contig Taxonomy
 export JOB10B_CPUS=24
 export JOB10B_QUEUE="${QUEUE}"
