@@ -34,7 +34,7 @@ echo "Input: ${PAIR2}"
 module load apptainer
 
 # Run Kraken2
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN \
+apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
     kraken2 --db ${KRAKEN2_DB} --paired \
     --classified-out ${OUTDIR}/cseqs#.fq \
     --output ${OUTDIR}/kraken_results.txt \
@@ -48,7 +48,7 @@ RESULTS="${OUTDIR}/kraken_results.txt"
 apptainer exec --bind ${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $BRACKEN \
     est_abundance.py -i ${REPORT} \
     -o ${OUTDIR}/bracken_results.txt \
-    -k ${KRAKEN2_DB}/database${KRAKEN_KMER_SIZE}mers.kmer_distrib
+    -k ${KRAKEN2_DB}/database${KRAKEN2_KMER_SIZE}mers.kmer_distrib
 
 # Extract human reads
 TAXID=9606

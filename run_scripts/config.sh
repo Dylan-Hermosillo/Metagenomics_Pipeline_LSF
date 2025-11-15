@@ -8,13 +8,12 @@ export BOWTIE2=$CONT/quay.io_biocontainers_bowtie2:2.5.4--he96a11b_6.sif
 export APPT=/usr/local/apps/apptainer/1.4.2-1/bin/apptainer
 export MEGAHIT=$CONT/quay.io_biocontainers_megahit:1.2.9--haf24da9_8.sif
 export SPADES=$CONT/quay.io_biocontainers_spades:4.2.0--h8d6e82b_2.sif
-export METASPADES=$SPADES  # metaSPAdes is part of SPAdes package
 export BWA=$CONT/quay.io_biocontainers_bwa:0.7.17--h5bf99c6_8.sif
 export SAMTOOLS=$CONT/staphb_samtools:1.21.sif
 export CONCOCT=$CONT/quay.io_biocontainers_concoct:1.1.0--py38h7be5676_2.sif
 export QUAST=$CONT/quay.io_biocontainers_quast:5.2.0--py310pl5321hc8f18ef_2.sif
 export CHECKM=$CONT/checkm2.sif
-export KRAKEN=$CONT/quay.io_biocontainers_kraken2:2.1.6--pl5321h077b44d_0.sif
+export KRAKEN2=$CONT/quay.io_biocontainers_kraken2:2.1.6--pl5321h077b44d_0.sif
 export BRACKEN=$CONT/quay.io_biocontainers_bracken:3.1--h9948957_0.sif
 export KRAKENTOOLS=$CONT/quay.io_biocontainers_krakentools:1.2--pyh5e36f6f_0.sif
 
@@ -31,9 +30,9 @@ export ADAPTERS=/rs1/shares/brc/admin/databases/adapters/TruSeq3-PE-2.fa
 
 # Database paths (update these to your actual database locations)
 export DB="/rs1/shares/brc/admin/databases"
-export CHECKM2_DB=$DB/checkm2_db/uniref100.KO.1.dmnd
-export KRAKEN2_DB=$DB/kraken2_db
-export KRAKEN_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
+export CHECKM2_DB=$DB/CheckM2_database/uniref100.KO.1.dmnd
+export KRAKEN2_DB=$DB/kraken2
+export KRAKEN2_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
 
 # ---- Directory Structure ----
 
