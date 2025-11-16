@@ -273,7 +273,7 @@ JOBID9D1=$(bsub -J "$JOB9D1[1-$NUM_JOB]%$NUM_JOB" \
     < $RUN_SCRIPTS/${JOB9D1}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 9D array with ID $JOBID9D1"
 
-# Job 9D21: CheckM2 (depends on 9A2, runs concurrently with 9B/9C) metaSPAdes
+# Job 9D2: CheckM2 (depends on 9A2, runs concurrently with 9B/9C) metaSPAdes
 echo "Launching Job 9D: CheckM2"
 JOBID9D2=$(bsub -J "$JOB9D2[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB9D2_CPUS \

@@ -144,9 +144,9 @@ export JOB10A="10A_read_taxonomy"
 export JOB10B="10B_contig_taxonomy"
 export QUEUE="shared_memory"
 # 01 Wrapper Gen
-export JOB1_CPUS=6
+export JOB1_CPUS=1
 export JOB1_QUEUE="${QUEUE}"
-export JOB1_MEMORY="6GB"
+export JOB1_MEMORY="1GB"
 export JOB1_TIME="0:05"
 export CHUNK_SIZE=50
 # 02 SRA Pull
@@ -154,91 +154,91 @@ export JOB2_CPUS=6
 # 03 FastQC Before Trim
 export JOB3_CPUS=1
 export JOB3_QUEUE="${QUEUE}"
-export JOB3_MEMORY="4GB"
+export JOB3_MEMORY="1GB"
 export JOB3_TIME="01:00"
 # 04 Trimmomatic
-export JOB4_CPUS=8
+export JOB4_CPUS=4
 export JOB4_QUEUE="${QUEUE}"
-export JOB4_MEMORY="32GB"
-export JOB4_TIME="02:00"
+export JOB4_MEMORY="2GB"
+export JOB4_TIME="01:30"
 # 05 Bowtie2 Decontamination
-export JOB5_CPUS=24
+export JOB5_CPUS=16
 export JOB5_QUEUE="${QUEUE}"
-export JOB5_MEMORY="120GB"
+export JOB5_MEMORY="8GB"
 export JOB5_TIME="06:00"
 # 06 FastQC After Trim
 export JOB6_CPUS=1
 export JOB6_QUEUE="${QUEUE}"
-export JOB6_MEMORY="4GB"
+export JOB6_MEMORY="1GB"
 export JOB6_TIME="01:00"
 # 07A MEGAHIT Assembly
-export JOB7A_CPUS=28
+export JOB7A_CPUS=16
 export JOB7A_QUEUE="${QUEUE}"
-export JOB7A_MEMORY="140GB"
+export JOB7A_MEMORY="16GB"
 export JOB7A_MEMORY_GB=0.9  # MEGAHIT uses ratio (0.0-1.0) or exact value
-export JOB7A_TIME="24:00"
+export JOB7A_TIME="02:00"
 # 07B metaSPAdes Assembly
-export JOB7B_CPUS=28
+export JOB7B_CPUS=20
 export JOB7B_QUEUE="${QUEUE}"
-export JOB7B_MEMORY="140GB"
+export JOB7B_MEMORY="128GB"
 export JOB7B_MEMORY_GB=128  # metaSPAdes uses GB value
-export JOB7B_TIME="48:00"
+export JOB7B_TIME="24:00"
 # 08A Align MEGAHIT
-export JOB8A_CPUS=24
+export JOB8A_CPUS=8
 export JOB8A_QUEUE="${QUEUE}"
-export JOB8A_MEMORY="192GB"
+export JOB8A_MEMORY="10GB"
 export JOB8A_TIME="10:00"
 # 08B Align metaSPAdes
-export JOB8B_CPUS=24
+export JOB8B_CPUS=8
 export JOB8B_QUEUE="${QUEUE}"
-export JOB8B_MEMORY="192GB"
+export JOB8B_MEMORY="10GB"
 export JOB8B_TIME="10:00"
 # 09A1 CONCOCT/BWA Binning - MEGAHIT
 export JOB9A1_CPUS=24
 export JOB9A1_QUEUE="${QUEUE}"
-export JOB9A1_MEMORY="120GB"
+export JOB9A1_MEMORY="32GB"
 export JOB9A1_TIME="12:00"
 # 09A2 CONCOCT/BWA Binning - metaspades
 export JOB9A2_CPUS=24
 export JOB9A2_QUEUE="${QUEUE}"
-export JOB9A2_MEMORY="120GB"
+export JOB9A2_MEMORY="32GB"
 export JOB9A2_TIME="12:00"
 export CONCOCT_CHUNK_SIZE=10000
 # 09B Add Bin Numbers (non-array job) (easy job -- will do both megahit and metaspades here)
 export JOB9B_CPUS=2
 export JOB9B_QUEUE="${QUEUE}"
-export JOB9B_MEMORY="10GB"
+export JOB9B_MEMORY="2GB"
 export JOB9B_TIME="01:00"
 # 09C1 QUAST MEGAHIT
-export JOB9C1_CPUS=24
+export JOB9C1_CPUS=8
 export JOB9C1_QUEUE="${QUEUE}"
-export JOB9C1_MEMORY="120GB"
+export JOB9C1_MEMORY="8GB"
 export JOB9C1_TIME="12:00"
 # 09C2 QUAST metaSPAdes
-export JOB9C2_CPUS=24
+export JOB9C2_CPUS=8
 export JOB9C2_QUEUE="${QUEUE}"
-export JOB9C2_MEMORY="120GB"
+export JOB9C2_MEMORY="16GB"
 export JOB9C2_TIME="12:00"
 # 09D CheckM2 MEGAHIT
 export JOB9D1_CPUS=24
 export JOB9D1_QUEUE="${QUEUE}"
-export JOB9D1_MEMORY="120GB"
+export JOB9D1_MEMORY="32GB"
 export JOB9D1_TIME="24:00"
 # 09D CheckM2 metaSPAdes
 export JOB9D2_CPUS=24
 export JOB9D2_QUEUE="${QUEUE}"
-export JOB9D2_MEMORY="120GB"
+export JOB9D2_MEMORY="32GB"
 export JOB9D2_TIME="24:00"
 # 10A Read Taxonomy
 export JOB10A_CPUS=24
 export JOB10A_QUEUE="${QUEUE}"
-export JOB10A_MEMORY="120GB"
+export JOB10A_MEMORY="48GB"
 export JOB10A_TIME="12:00"
 export KRAKEN2_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
 # 10B Contig Taxonomy
 export JOB10B_CPUS=24
 export JOB10B_QUEUE="${QUEUE}"
-export JOB10B_MEMORY="120GB"
+export JOB10B_MEMORY="48GB"
 export JOB10B_TIME="12:00"
 
 # --- Useful Functions ---
