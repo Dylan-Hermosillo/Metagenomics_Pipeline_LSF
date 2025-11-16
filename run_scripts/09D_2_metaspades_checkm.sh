@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${CHECKM_LOGS_O}/checkm.09D.%J_%I.log"
-#BSUB -e "${CHECKM_LOGS_E}/checkm.09D.%J_%I.err"
+#BSUB -o "${CHECKM_LOGS_META_O}/checkm.09D.%J_%I.log"
+#BSUB -e "${CHECKM_LOGS_META_E}/checkm.09D.%J_%I.err"
 
 # This script runs CheckM2 on CONCOCT bins
 

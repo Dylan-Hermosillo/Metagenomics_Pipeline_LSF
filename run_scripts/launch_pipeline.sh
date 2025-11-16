@@ -208,31 +208,31 @@ JOBID9A1=$(bsub -J "$JOB9A1[1-$NUM_JOB]%$NUM_JOB" \
     < $RUN_SCRIPTS/${JOB9A1}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 9A array with ID $JOBID9A1"
 
-# Job 9A2: CONCOCT Binning (depends on 8A) - metaSPAdes
+# Job 9A2: CONCOCT Binning (depends on 8B) - metaSPAdes
 echo "Launching Job 9A: CONCOCT Binning"
 JOBID9A2=$(bsub -J "$JOB9A2[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB9A2_CPUS \
     -q $JOB9A2_QUEUE \
     -R "rusage[mem=$JOB9A2_MEMORY]" \
     -W $JOB9A2_TIME \
-    -w "done($JOBID8A)" \
+    -w "done($JOBID8B)" \
     -o "${CONCOCT_LOGS_O_META}/concoct.09A.%J_%I.log" \
     -e "${CONCOCT_LOGS_E_META}/concoct.09A.%J_%I.err" \
     < $RUN_SCRIPTS/${JOB9A2}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 9A array with ID $JOBID9A2"
 
-# Job 9B1: Add Bin Numbers (depends on 9A1 & 9A2, non-array job)
+# Job 9B: Add Bin Numbers (depends on 9A1 & 9A2)
 echo "Launching Job 9B: Add Bin Numbers"
-JOBID9B=$(bsub -J "$JOB9B" \
+JOBID9B=$(bsub -J "$JOB9B[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB9B_CPUS \
     -q $JOB9B_QUEUE \
     -R "rusage[mem=$JOB9B_MEMORY]" \
     -W $JOB9B_TIME \
     -w "done($JOBID9A1) && done($JOBID9A2)" \
-    -o "${CONCOCT_LOGS_O}/add_bin_nums.09B.%J.log" \
-    -e "${CONCOCT_LOGS_E}/add_bin_nums.09B.%J.err" \
+    -o "${CONCOCT_LOGS_O}/add_bin_nums.09B.%J_%I.log" \
+    -e "${CONCOCT_LOGS_E}/add_bin_nums.09B.%J_%I.err" \
     < $RUN_SCRIPTS/${JOB9B}.sh | awk '{print $2}' | tr -d '<>[]')
-echo "Submitted Job 9B with ID $JOBID9B"
+echo "Submitted Job 9B array with ID $JOBID9B"
 
 # Job 9C1: QUAST (depends on 9B) - MEGAHIT
 echo "Launching Job 9C: QUAST"

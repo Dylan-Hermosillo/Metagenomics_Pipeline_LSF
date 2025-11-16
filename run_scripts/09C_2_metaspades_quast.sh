@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${QUAST_LOGS_O}/quast.09C.%J_%I.log"
-#BSUB -e "${QUAST_LOGS_E}/quast.09C.%J_%I.err"
+#BSUB -o "${QUAST_LOGS_META_O}/quast.09C.%J_%I.log"
+#BSUB -e "${QUAST_LOGS_META_E}/quast.09C.%J_%I.err"
 
 # This script runs QUAST on concatenated binned contigs
 

@@ -21,7 +21,7 @@ OUTDIR="${CONCOCT_META}/${NAME}"
 mkdir -p $OUTDIR
 
 # Assembly contigs
-CONTIGS="${METASPADES_DIR}/${NAME}/final.contigs.fa"
+CONTIGS="${METASPADES_DIR}/${NAME}/contigs.fasta"
 
 # Sorted BAM from alignment step
 SORTED_BAM="${ALIGN_METASPADES_DIR}/${NAME}/sorted.bam"
