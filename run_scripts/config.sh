@@ -155,28 +155,28 @@ export JOB2_CPUS=6
 export JOB3_CPUS=1
 export JOB3_QUEUE="${QUEUE}"
 export JOB3_MEMORY="1GB"
-export JOB3_TIME="01:00"
+export JOB3_TIME="02:00"
 # 04 Trimmomatic
 export JOB4_CPUS=4
 export JOB4_QUEUE="${QUEUE}"
 export JOB4_MEMORY="2GB"
-export JOB4_TIME="01:30"
+export JOB4_TIME="04:30"
 # 05 Bowtie2 Decontamination
 export JOB5_CPUS=16
 export JOB5_QUEUE="${QUEUE}"
 export JOB5_MEMORY="8GB"
-export JOB5_TIME="06:00"
+export JOB5_TIME="10:00"
 # 06 FastQC After Trim
 export JOB6_CPUS=1
 export JOB6_QUEUE="${QUEUE}"
 export JOB6_MEMORY="1GB"
-export JOB6_TIME="01:00"
+export JOB6_TIME="02:00"
 # 07A MEGAHIT Assembly
 export JOB7A_CPUS=16
 export JOB7A_QUEUE="${QUEUE}"
 export JOB7A_MEMORY="16GB"
 export JOB7A_MEMORY_GB=0.9  # MEGAHIT uses ratio (0.0-1.0) or exact value
-export JOB7A_TIME="02:00"
+export JOB7A_TIME="06:00"
 # 07B metaSPAdes Assembly
 export JOB7B_CPUS=20
 export JOB7B_QUEUE="${QUEUE}"
