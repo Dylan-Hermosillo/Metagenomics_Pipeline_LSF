@@ -36,6 +36,7 @@ module load apptainer
 # Run Kraken2
 apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
     kraken2 --db ${KRAKEN2_DB} --paired \
+    --memory-mapping \
     --classified-out ${OUTDIR}/cseqs#.fq \
     --output ${OUTDIR}/kraken_results.txt \
     --report ${OUTDIR}/kraken_report.txt \
