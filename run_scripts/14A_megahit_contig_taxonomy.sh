@@ -10,7 +10,7 @@ pwd; hostname; date
 source ./config.sh
 
 # Initialize Parameters
-JOBINDEX=$(($LSB_JOBINDEX -1))
+JOBINDEX=$(($LSB_JOBINDEX - 1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 
@@ -38,6 +38,7 @@ module load apptainer
 # Run Kraken2
 apptainer exec --bind ${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
     kraken2 --db ${KRAKEN2_DB} \
+    --memory-mapping \
     --classified-out ${OUTDIR}/cseqs#.fa \
     --output ${OUTDIR}/kraken_results.txt \
     --report ${OUTDIR}/kraken_report.txt \

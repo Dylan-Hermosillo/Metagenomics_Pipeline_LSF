@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
 #BSUB -o "${FASTQC_AFTER_LOGS_O}/fastqc.06.%J_%I.log"
-#BSUB -e "${FASTQC_AFTER_LOGS_E}/fastqc.06_%J_%I.err"
+#BSUB -e "${FASTQC_AFTER_LOGS_E}/fastqc.06.%J_%I.err"
 
 # -------------------------
 # 06_fastqc_after.sh - This script runs FastQC on raw reads before trimming
@@ -12,7 +12,7 @@ pwd; hostname; date
 source ./config.sh
 
 # Initialize Parameters
-JOBINDEX=$(($LSB_JOBINDEX -1))
+JOBINDEX=$(($LSB_JOBINDEX - 1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 

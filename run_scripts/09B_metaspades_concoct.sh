@@ -12,7 +12,7 @@ pwd; hostname; date
 source ./config.sh
 
 # Initialize Parameters
-JOBINDEX=$(($LSB_JOBINDEX -1))
+JOBINDEX=$(($LSB_JOBINDEX - 1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 
@@ -27,7 +27,7 @@ CONTIGS="${METASPADES_DIR}/${NAME}/contigs.fasta"
 SORTED_BAM="${ALIGN_METASPADES_DIR}/${NAME}/sorted.bam"
 
 if [[ ! -f $CONTIGS ]]; then
-    echo "Error: MEGAHIT assembly not found for ${NAME}"
+    echo "Error: metaSPAdes assembly not found for ${NAME}"
     exit 1
 fi
 
