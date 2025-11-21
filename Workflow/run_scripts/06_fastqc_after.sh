@@ -15,11 +15,12 @@ source ./config.sh
 JOBINDEX=$(($LSB_JOBINDEX - 1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
-
+OUTDIR=${FASTQC_AFTER}/${NAME}
+mkdir -p $OUTDIR
 # Run FastQC After Trimming
 module load apptainer
 apptainer exec --bind ${FASTQC_AFTER}:${FASTQC_AFTER},${TRIMMED}:${TRIMMED} $FASTQC \
-    fastqc --threads $JOB6_CPUS -o $FASTQC_AFTER/${NAME} \
+    fastqc --threads $JOB6_CPUS -o $OUTDIR \
     $TRIMMED/${NAME}_R1_paired.fastq.gz \
     $TRIMMED/${NAME}_R2_paired.fastq.gz
 

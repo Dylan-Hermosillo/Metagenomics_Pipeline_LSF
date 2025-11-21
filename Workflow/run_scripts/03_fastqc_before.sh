@@ -16,9 +16,11 @@ JOBINDEX=$(($LSB_JOBINDEX - 1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 # Run FastQC Before Trimming
+OUTDIR=${FASTQC_BEFORE}/${NAME}
+mkdir -p $OUTDIR
 module load apptainer
 apptainer exec --bind ${FASTQC_BEFORE}:${FASTQC_BEFORE},${READS_DIR}:${READS_DIR} $FASTQC \
-    fastqc --threads $JOB3_CPUS -o $FASTQC_BEFORE/${NAME} \
+    fastqc --threads $JOB3_CPUS -o $OUTDIR \
     $READS_DIR/${NAME}/${NAME}/${NAME}_1.fastq \
     $READS_DIR/${NAME}/${NAME}/${NAME}_2.fastq
 
