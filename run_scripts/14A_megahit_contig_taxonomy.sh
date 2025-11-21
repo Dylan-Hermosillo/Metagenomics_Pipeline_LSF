@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${CONTIG_TAX_LOGS_O}/contig_taxonomy.10B.%J_%I.log"
-#BSUB -e "${CONTIG_TAX_LOGS_E}/contig_taxonomy.10B.%J_%I.err"
+#BSUB -o "${CONTIG_TAX_LOGS_O}/contig_taxonomy.14A.%J_%I.log"
+#BSUB -e "${CONTIG_TAX_LOGS_E}/contig_taxonomy.14A.%J_%I.err"
 
 # This script runs Kraken2/Bracken taxonomy classification on contigs
 
@@ -41,7 +41,7 @@ apptainer exec --bind ${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONTIG_TAX_DIR}:${CONTIG_T
     --classified-out ${OUTDIR}/cseqs#.fa \
     --output ${OUTDIR}/kraken_results.txt \
     --report ${OUTDIR}/kraken_report.txt \
-    --use-names --threads $JOB10B_CPUS \
+    --use-names --threads $JOB14A_CPUS \
     ${CONTIGS}
 
 # Run Bracken

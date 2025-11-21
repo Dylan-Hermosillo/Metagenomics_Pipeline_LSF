@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${MEGAHIT_LOGS_O}/megahit.07A.%J_%I.log"
-#BSUB -e "${MEGAHIT_LOGS_E}/megahit.07A.%J_%I.err"
+#BSUB -o "${MEGAHIT_LOGS_O}/megahit_assembly.07A.%J_%I.log"
+#BSUB -e "${MEGAHIT_LOGS_E}/megahit_assembly.07A.%J_%I.err"
 
 # -------------------------
 # 07A_megahit.sh - This script runs MEGAHIT assembly on decontaminated reads

@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${CONCOCT_LOGS_O}/add_bin_nums.09B.%J_%I.log"
-#BSUB -e "${CONCOCT_LOGS_E}/add_bin_nums.09B.%J_%I.err"
+#BSUB -o "${ADD_BIN_LOGS_O}/add_bin_nums.10.%J_%I.log" \
+#BSUB -e "${ADD_BIN_LOGS_E}/add_bin_nums.10.%J_%I.err" \
 
 # This script adds bin numbers to contig names and concatenates all bins
 

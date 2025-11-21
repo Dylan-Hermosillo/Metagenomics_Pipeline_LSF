@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${METASPADES_LOGS_O}/metaspades.07B.%J_%I.log"
-#BSUB -e "${METASPADES_LOGS_E}/metaspades.07B.%J_%I.err"
+#BSUB -o "${METASPADES_LOGS_O}/metaspades_assembly.07B.%J_%I.log"
+#BSUB -e "${METASPADES_LOGS_E}/metaspades_assembly.07B.%J_%I.err"
 
 # -------------------------
 # 07B_metaspades.sh - This script runs metaSPAdes assembly on decontaminated reads

@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${READ_TAX_LOGS_O}/read_taxonomy.10A.%J_%I.log"
-#BSUB -e "${READ_TAX_LOGS_E}/read_taxonomy.10A.%J_%I.err"
+#BSUB -o "${READ_TAX_LOGS_O}/read_taxonomy.13.%J_%I.log"
+#BSUB -e "${READ_TAX_LOGS_E}/read_taxonomy.13.%J_%I.err"
 
 # This script runs Kraken2/Bracken taxonomy classification on reads
 
@@ -39,7 +39,7 @@ apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR
     --classified-out ${OUTDIR}/cseqs#.fq \
     --output ${OUTDIR}/kraken_results.txt \
     --report ${OUTDIR}/kraken_report.txt \
-    --use-names --threads $JOB10A_CPUS \
+    --use-names --threads $JOB13_CPUS \
     ${PAIR1} ${PAIR2}
 
 # Run Bracken

@@ -39,12 +39,12 @@ export KRAKEN2_DB=$DB/kraken2
 # Here I separate my working dir from the pipeline directory, for example.
 
 # 01 Input/Output directories; for the wrapper generation
-export WRAP_OUT="$WORKING_DIR/01_WRAPPER_GEN"
-export WRAP_SCRIPTS="$WORKING_DIR/01_WRAPPER_GEN/scripts" # wrapper scripts to be aggregated
-export WRAP_LOGS_O="$WRAP_OUT/out"
-export WRAP_LOGS_E="$WRAP_OUT/err"
+export WRAP_OUT=$WORKING_DIR/01_WRAPPER_GEN
+export WRAP_SCRIPTS=$WORKING_DIR/01_WRAPPER_GEN/scripts # wrapper scripts to be aggregated
+export WRAP_LOGS_O=$WRAP_OUT/out
+export WRAP_LOGS_E=$WRAP_OUT/err
 # 02 Data Pull Parallel
-export DATASET_LIST="$WORKING_DIR/test_data.txt"
+export DATASET_LIST=$WORKING_DIR/test_data.txt
 export READS_DIR=$WORKING_DIR/02_SRA_TOOLKIT
 export SRA_LOGS_O=$READS_DIR/out
 export SRA_LOGS_E=$READS_DIR/err
@@ -68,12 +68,13 @@ export FASTQC_AFTER=$WORKING_DIR/06_FASTQC_AFTER
 export FASTQC_AFTER_LOGS_O=$FASTQC_AFTER/out
 export FASTQC_AFTER_LOGS_E=$FASTQC_AFTER/err
 export FASTQC_A_HTML=$FASTQC_AFTER/htmls
-# 07 Assembly Outputs
+# 07A Assembly Outputs - MEGAHIT
 export ASSEM_DIR=$WORKING_DIR/07_ASSEMBLY
-export MEGAHIT_DIR=$ASSEM_DIR/07A_megahit_assembly # MEGAHIT
+export MEGAHIT_DIR=$ASSEM_DIR/07A_megahit_assembly
 export MEGAHIT_LOGS_O=$MEGAHIT_DIR/out
 export MEGAHIT_LOGS_E=$MEGAHIT_DIR/err
-export METASPADES_DIR=$ASSEM_DIR/07B_metaspades_assembly # metaSPAdes
+# 07B Assembly Outputs - metaSPAdes
+export METASPADES_DIR=$ASSEM_DIR/07B_metaspades_assembly
 export METASPADES_LOGS_O=$METASPADES_DIR/out
 export METASPADES_LOGS_E=$METASPADES_DIR/err
 # 08A Alignment - MEGAHIT
@@ -85,40 +86,50 @@ export ALIGN_MEGAHIT_LOGS_E=$ALIGN_MEGAHIT_DIR/err
 export ALIGN_METASPADES_DIR=$ALIGN_DIR/08B_metaspades
 export ALIGN_METASPADES_LOGS_O=$ALIGN_METASPADES_DIR/out
 export ALIGN_METASPADES_LOGS_E=$ALIGN_METASPADES_DIR/err
-# 09A CONCOCT Binning
+# 09A CONCOCT Binning - MEGAHIT
 export BINNING_DIR=$WORKING_DIR/09_BINNING
-export CONCOCT_MEGA=$BINNING_DIR/09A_concoct_megahit # MEGAHIT
+export CONCOCT_MEGA=$BINNING_DIR/09A_concoct_megahit
 export CONCOCT_LOGS_O_MEGA=$CONCOCT_MEGA/out
 export CONCOCT_LOGS_E_MEGA=$CONCOCT_MEGA/err
-export CONCOCT_META=$BINNING_DIR/09A_concoct_metaspades # metaSPAdes
+# 09B CONCOCT Binning - metaSPAdes
+export CONCOCT_META=$BINNING_DIR/09A_concoct_metaspades
 export CONCOCT_LOGS_O_META=$CONCOCT_META/out
 export CONCOCT_LOGS_E_META=$CONCOCT_META/err
-# 09C QUAST
-export QUAST_DIR=$BINNING_DIR/09C_quast
-export QUAST_MEGA=$QUAST_DIR/09C_megahit # MEGAHIT
+# 10 Add Bin Numbers
+export ADD_BIN_DIR=$BINNING_DIR/10_ADD_BIN_NUMS
+export ADD_BIN_LOGS_O=$ADD_BIN_DIR/out
+export ADD_BIN_LOGS_E=$ADD_BIN_DIR/err
+# 11A QUAST - MEGAHIT
+export QUAST_DIR=$WORKING_DIR/11_QUAST
+export QUAST_MEGA=$QUAST_DIR/11A_megahit
 export QUAST_LOGS_O_MEGA=$QUAST_MEGA/out
 export QUAST_LOGS_E_MEGA=$QUAST_MEGA/err
-export QUAST_META=$QUAST_DIR/09C_metaspades # metaSPAdes
+# 11B QUAST - metaSPAdes
+export QUAST_META=$QUAST_DIR/11B_metaspades 
 export QUAST_LOGS_O_META=$QUAST_META/out
 export QUAST_LOGS_E_META=$QUAST_META/err
-# 09D CheckM2
-export CHECKM_DIR=$BINNING_DIR/09D_checkm
-export CHECKM_MEGA=$CHECKM_DIR/09D_megahit # MEGAHIT
+# 12A CheckM2 - MEGAHIT
+export CHECKM_DIR=$WORKING_DIR/12_CHECKM2
+export CHECKM_MEGA=$CHECKM_DIR/12A_megahit
 export CHECKM_LOGS_O_MEGA=$CHECKM_MEGA/out
 export CHECKM_LOGS_E_MEGA=$CHECKM_MEGA/err
-export CHECKM_META=$CHECKM_DIR/09D_metaspades # metaSPAdes
+# 12B CheckM2 - metaSPAdes
+export CHECKM_META=$CHECKM_DIR/12B_metaspades
 export CHECKM_LOGS_O_META=$CHECKM_META/out
 export CHECKM_LOGS_E_META=$CHECKM_META/err
-# 10A Read Taxonomy
-export TAXONOMY_DIR=$WORKING_DIR/10_TAXONOMY
-export READ_TAX_DIR=$TAXONOMY_DIR/10A_read_taxonomy
+# 13 Read Taxonomy
+export READ_TAX_DIR=$WORKING_DIR/13_READ_TAXONOMY
 export READ_TAX_LOGS_O=$READ_TAX_DIR/out
 export READ_TAX_LOGS_E=$READ_TAX_DIR/err
-# 10B Contig Taxonomy
-export CONTIG_TAX_DIR=$TAXONOMY_DIR/10B_contig_taxonomy
-export CONTIG_TAX_LOGS_O=$CONTIG_TAX_DIR/out
-export CONTIG_TAX_LOGS_E=$CONTIG_TAX_DIR/err
-
+# 14A Contig Taxonomy - MEGAHIT
+export CONTIG_TAX_DIR=$WORKING_DIR/14_CONTIG_TAXONOMY
+export CONTIG_TAX_DIR_MEGA=$CONTIG_TAX_DIR/14A_contig_taxonomy_megahit
+export CONTIG_LOGS_O_MEGA=$CONTIG_TAX_DIR_MEGA/out
+export CONTIG_LOGS_E_MEGA=$CONTIG_TAX_DIR_MEGA/err
+# 14B Contig Taxonomy - metaSPAdes
+export CONTIG_TAX_DIR_META=$CONTIG_TAX_DIR/14B_contig_taxonomy_metaspades
+export CONTIG_LOGS_O_META=$CONTIG_TAX_DIR_META/out
+export CONTIG_LOGS_E_META=$CONTIG_TAX_DIR_META/err
 # ---- End Directory Structure ----
 
 # --- Job Parameters ---
@@ -129,20 +140,23 @@ export JOB3="03_fastqc_before"
 export JOB4="04_trimmomatic"
 export JOB5="05_bowtie2"
 export JOB6="06_fastqc_after"
-export JOB7A="07A_megahit"
-export JOB7B="07B_metaspades"
-export JOB8A="08A_align_megahit"
-export JOB8B="08B_align_metaspades"
-export JOB9A1="09A_1_megahit_concoct"
-export JOB9A2="09A_2_metaspades_concoct"
-export JOB9B="09B_add_bin_nums"
-export JOB9C1="09C_1_megahit_quast"
-export JOB9C2="09C_2_metaspades_quast"
-export JOB9D1="09D_1_megahit_checkm"
-export JOB9D2="09D_2_metaspades_checkm"
-export JOB10A="10A_read_taxonomy"
-export JOB10B="10B_contig_taxonomy"
+export JOB7A="07A_megahit_assembly"
+export JOB7B="07B_metaspades_assembly"
+export JOB8A="08A_megahit_alignment"
+export JOB8B="08B_metaspades_alignment"
+export JOB9A="09A_megahit_concoct"
+export JOB9B="09B_metaspades_concoct"
+export JOB10="10_add_bin_nums"
+export JOB11A="11A_megahit_quast"
+export JOB11B="11B_metaspades_quast"
+export JOB12A="12A_megahit_checkm"
+export JOB12B="12B_metaspades_checkm"
+export JOB13="13_read_taxonomy"
+export JOB14A="14A_megahit_contig_taxonomy"
+export JOB14B="14B_metaspades_contig_taxonomy"
+
 export QUEUE="shared_memory"
+
 # 01 Wrapper Gen
 export JOB1_CPUS=1
 export JOB1_QUEUE="${QUEUE}"
@@ -193,53 +207,59 @@ export JOB8B_CPUS=8
 export JOB8B_QUEUE="${QUEUE}"
 export JOB8B_MEMORY="10GB"
 export JOB8B_TIME="10:00"
-# 09A1 CONCOCT/BWA Binning - MEGAHIT
-export JOB9A1_CPUS=24
-export JOB9A1_QUEUE="${QUEUE}"
-export JOB9A1_MEMORY="32GB"
-export JOB9A1_TIME="12:00"
-# 09A2 CONCOCT/BWA Binning - metaspades
-export JOB9A2_CPUS=24
-export JOB9A2_QUEUE="${QUEUE}"
-export JOB9A2_MEMORY="32GB"
-export JOB9A2_TIME="12:00"
-export CONCOCT_CHUNK_SIZE=10000
-# 09B Add Bin Numbers (non-array job) (easy job -- will do both megahit and metaspades here)
-export JOB9B_CPUS=2
+# 09A CONCOCT/BWA Binning - MEGAHIT
+export JOB9A_CPUS=24
+export JOB9A_QUEUE="${QUEUE}"
+export JOB9A_MEMORY="32GB"
+export JOB9A_TIME="12:00"
+# 09B CONCOCT/BWA Binning - metaspades
+export JOB9B_CPUS=24
 export JOB9B_QUEUE="${QUEUE}"
-export JOB9B_MEMORY="2GB"
-export JOB9B_TIME="01:00"
-# 09C1 QUAST MEGAHIT
-export JOB9C1_CPUS=8
-export JOB9C1_QUEUE="${QUEUE}"
-export JOB9C1_MEMORY="8GB"
-export JOB9C1_TIME="12:00"
-# 09C2 QUAST metaSPAdes
-export JOB9C2_CPUS=8
-export JOB9C2_QUEUE="${QUEUE}"
-export JOB9C2_MEMORY="16GB"
-export JOB9C2_TIME="12:00"
-# 09D CheckM2 MEGAHIT
-export JOB9D1_CPUS=24
-export JOB9D1_QUEUE="${QUEUE}"
-export JOB9D1_MEMORY="32GB"
-export JOB9D1_TIME="24:00"
-# 09D CheckM2 metaSPAdes
-export JOB9D2_CPUS=24
-export JOB9D2_QUEUE="${QUEUE}"
-export JOB9D2_MEMORY="32GB"
-export JOB9D2_TIME="24:00"
-# 10A Read Taxonomy
-export JOB10A_CPUS=24
-export JOB10A_QUEUE="${QUEUE}"
-export JOB10A_MEMORY="48GB"
-export JOB10A_TIME="12:00"
+export JOB9B_MEMORY="32GB"
+export JOB9B_TIME="12:00"
+export CONCOCT_CHUNK_SIZE=10000
+# 10 Add Bin Numbers (non-array job) (easy job -- will do both megahit and metaspades here)
+export JOB10_CPUS=2
+export JOB10_QUEUE="${QUEUE}"
+export JOB10_MEMORY="2GB"
+export JOB10_TIME="01:00"
+# 11A QUAST MEGAHIT
+export JOB11A_CPUS=8
+export JOB11A_QUEUE="${QUEUE}"
+export JOB11A_MEMORY="8GB"
+export JOB11A_TIME="12:00"
+# 11B QUAST metaSPAdes
+export JOB11B_CPUS=8
+export JOB11B_QUEUE="${QUEUE}"
+export JOB11B_MEMORY="16GB"
+export JOB11B_TIME="12:00"
+# 12A CheckM2 MEGAHIT
+export JOB12A_CPUS=24
+export JOB12A_QUEUE="${QUEUE}"
+export JOB12A_MEMORY="32GB"
+export JOB12A_TIME="24:00"
+# 12B CheckM2 metaSPAdes
+export JOB12B_CPUS=24
+export JOB12B_QUEUE="${QUEUE}"
+export JOB12B_MEMORY="32GB"
+export JOB12B_TIME="24:00"
+# 13 Read Taxonomy
+export JOB13_CPUS=24
+export JOB13_QUEUE="${QUEUE}"
+export JOB13_MEMORY="48GB"
+export JOB13_TIME="12:00"
 export KRAKEN2_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
-# 10B Contig Taxonomy
-export JOB10B_CPUS=24
-export JOB10B_QUEUE="${QUEUE}"
-export JOB10B_MEMORY="48GB"
-export JOB10B_TIME="12:00"
+# 14A Contig Taxonomy MEGAHIT
+export JOB14A_CPUS=24
+export JOB14A_QUEUE="${QUEUE}"
+export JOB14A_MEMORY="48GB"
+export JOB14A_TIME="12:00"
+# 14B Contig Taxonomy metaSPAdes
+export JOB14B_CPUS=24
+export JOB14B_QUEUE="${QUEUE}"
+export JOB14B_MEMORY="48GB"
+export JOB14B_TIME="12:00"
+
 
 # --- Useful Functions ---
 

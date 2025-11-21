@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${ALIGN_METASPADES_LOGS_O}/align_metaspades.08B.%J_%I.log"
-#BSUB -e "${ALIGN_METASPADES_LOGS_E}/align_metaspades.08B.%J_%I.err"
+#BSUB -o "${ALIGN_METASPADES_LOGS_O}/metaspades_alignment.08B.%J_%I.log"
+#BSUB -e "${ALIGN_METASPADES_LOGS_E}/metaspades_alignment.08B.%J_%I.err"
 
 # -------------------------
 # 08B_align_metaspades.sh This script aligns clean reads to metaSPAdes assembly

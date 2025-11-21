@@ -15,15 +15,14 @@ source ./config.sh
 JOBINDEX=$(($LSB_JOBINDEX -1))
 names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
-FILES=
 # Run FastQC Before Trimming
 module load apptainer
 apptainer exec --bind ${FASTQC_BEFORE}:${FASTQC_BEFORE},${READS_DIR}:${READS_DIR} $FASTQC \
-    fastqc --threads $JOB3_CPUS -o $FASTQC_BEFORE \
+    fastqc --threads $JOB3_CPUS -o $FASTQC_BEFORE/${NAME} \
     $READS_DIR/${NAME}/${NAME}/${NAME}_1.fastq \
     $READS_DIR/${NAME}/${NAME}/${NAME}_2.fastq
 
-cd ${FASTQC_BEFORE}
+cd ${FASTQC_BEFORE}/${NAME}
 if ls *.html 1> /dev/null 2>&1; then
     mv *.html ${FASTQC_B_HTML}
 else

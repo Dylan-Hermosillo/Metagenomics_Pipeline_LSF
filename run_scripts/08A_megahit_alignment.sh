@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -R "span[hosts=1]"
-#BSUB -o "${ALIGN_MEGAHIT_LOGS_O}/align_megahit.08A.%J_%I.log"
-#BSUB -e "${ALIGN_MEGAHIT_LOGS_E}/align_megahit.08A.%J_%I.err"
+#BSUB -o "${ALIGN_MEGAHIT_LOGS_O}/megahit_alignment.08A.%J_%I.log" 
+#BSUB -e "${ALIGN_MEGAHIT_LOGS_E}/megahit_alignment.08A.%J_%I.err"
 
 # -------------------------
 # 08A_align_megahit.sh This script aligns clean reads to MEGAHIT assembly using BWA
