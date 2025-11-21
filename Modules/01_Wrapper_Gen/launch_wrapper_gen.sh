@@ -35,5 +35,5 @@ JOBID1=$(bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
      -o "${WRAP_LOGS_O}/wrapper.gen.%J.%I.log" \
      -e "${WRAP_LOGS_E}/wrapper.gen.%J.%I.err" \
      -W $JOB1_TIME \
-     < ${RUN_SCRIPTS}/${JOB1}.sh | awk '{print $2}' | tr -d '<>[]')
+     < ./${JOB1}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 1 array with ID $JOBID1"

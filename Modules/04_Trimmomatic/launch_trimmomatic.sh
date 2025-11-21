@@ -35,5 +35,5 @@ JOBID4=$(bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB4_TIME \
     -o "${TRIM_LOGS_O}/trim.04.%J_%I.log" \
     -e "${TRIM_LOGS_E}/trim.04.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB4}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB4}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 4 array with ID $JOBID4"

@@ -35,5 +35,5 @@ JOBID3=$(bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB3_TIME \
     -o "${FASTQC_LOGS_O}/fastqc.03.%J_%I.log" \
     -e "${FASTQC_LOGS_E}/fastqc.03.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB3}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB3}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 3 array with ID $JOBID3"

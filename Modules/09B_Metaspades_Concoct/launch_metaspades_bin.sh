@@ -36,5 +36,5 @@ JOBID9B=$(bsub -J "$JOB9B[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB9B_TIME \
     -o "${CONCOCT_LOGS_O_META}/metaspades_concoct.09B.%J_%I.log" \
     -e "${CONCOCT_LOGS_E_META}/metaspades_concoct.09B.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB9B}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB9B}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 9B array with ID $JOBID9B"

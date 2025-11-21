@@ -36,5 +36,5 @@ JOBID7A=$(bsub -J "$JOB7A[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB7A_TIME \
     -o "${MEGAHIT_LOGS_O}/megahit_assembly.07A.%J_%I.log" \
     -e "${MEGAHIT_LOGS_E}/megahit_assembly.07A.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB7A}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB7A}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 7A array with ID $JOBID7A"

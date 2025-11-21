@@ -36,5 +36,5 @@ JOBID12A=$(bsub -J "$JOB12A[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB12A_TIME \
     -o "${CHECKM_LOGS_O_MEGA}/megahit_checkm.12A.%J_%I.log" \
     -e "${CHECKM_LOGS_E_MEGA}/megahit_checkm.12A.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB12A}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB12A}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 12A array with ID $JOBID12A"

@@ -36,5 +36,5 @@ JOBID7B=$(bsub -J "$JOB7B[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB7B_TIME \
     -o "${METASPADES_LOGS_O}/metaspades_assembly.07B.%J_%I.log" \
     -e "${METASPADES_LOGS_E}/metaspades_assembly.07B.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB7B}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB7B}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 7B array with ID $JOBID7B"

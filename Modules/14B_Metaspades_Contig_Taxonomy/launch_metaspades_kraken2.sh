@@ -36,5 +36,5 @@ JOBID14B=$(bsub -J "$JOB14B[1-$NUM_JOB]%$NUM_JOB" \
     -W $JOB14B_TIME \
     -o "${CONTIG_TAX_LOGS_O}/contig_taxonomy.14A.%J_%I.log" \
     -e "${CONTIG_TAX_LOGS_E}/contig_taxonomy.14A.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB14B}.sh | awk '{print $2}' | tr -d '<>[]')
+    < ./${JOB14B}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 14B array with ID $JOBID14B"
