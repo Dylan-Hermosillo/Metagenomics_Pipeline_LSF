@@ -1,7 +1,6 @@
 # ---- Housekeeping ----
-# Working Dir & Run Scripts
+# Working Dir
 export WORKING_DIR=/share/ivirus/dhermos/pipeline_test # where I want all the output to go
-export RUN_SCRIPTS=$WORKING_DIR/run_scripts
 # Files -- change this txt to a list of your SRR/ERR id's
 export XFILE=$WORKING_DIR/test_data/test_data.txt
 # ---- Directory Structure ----

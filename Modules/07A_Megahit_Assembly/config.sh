@@ -3,9 +3,8 @@
 export CONT=/rs1/shares/brc/admin/containers/images # main image directory
 export APPT=/usr/local/apps/apptainer/1.4.2-1/bin/apptainer
 export MEGAHIT=$CONT/quay.io_biocontainers_megahit:1.2.9--haf24da9_8.sif
-# Working Dir & Run Scripts
+# Working Dir
 export WORKING_DIR=/share/ivirus/dhermos/pipeline_test # where I want all the output to go
-export RUN_SCRIPTS=$WORKING_DIR/run_scripts
 # Files -- change this txt to a list of your SRR/ERR id's
 export XFILE=$WORKING_DIR/test_data/test_data.txt
 # ---- Directory Structure ----

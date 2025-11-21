@@ -2,7 +2,7 @@
 # Containers
 export CONT=/rs1/shares/brc/admin/containers/images # main image directory
 export TRIMMOMATIC=$CONT/quay.io_biocontainers_trimmomatic:0.40--hdfd78af_0.sif
-# Working Dir & Run Scripts
+# Working Dir
 export WORKING_DIR=/share/ivirus/dhermos/pipeline_test # where I want all the output to go
 export RUN_SCRIPTS=$WORKING_DIR/run_scripts
 # Files -- change this txt to a list of your SRR/ERR id's
