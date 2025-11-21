@@ -1,11 +1,11 @@
 # ---- Housekeeping ----
 # Containers
 export CONT=/rs1/shares/brc/admin/containers/images # main image directory
+export APPT=/usr/local/apps/apptainer/1.4.2-1/bin/apptainer
 export SRA_TOOLKIT=$CONT/quay.io_biocontainers_sra-tools:3.2.1--h4304569_1.sif
 export FASTQC=$CONT/quay.io_biocontainers_fastqc:0.12.1--hdfd78af_0.sif
 export TRIMMOMATIC=$CONT/quay.io_biocontainers_trimmomatic:0.40--hdfd78af_0.sif
 export BOWTIE2=$CONT/quay.io_biocontainers_bowtie2:2.5.4--he96a11b_6.sif
-export APPT=/usr/local/apps/apptainer/1.4.2-1/bin/apptainer
 export MEGAHIT=$CONT/quay.io_biocontainers_megahit:1.2.9--haf24da9_8.sif
 export SPADES=$CONT/quay.io_biocontainers_spades:4.2.0--h8d6e82b_2.sif
 export BWA=$CONT/quay.io_biocontainers_bwa:0.7.17--h5bf99c6_8.sif
@@ -109,14 +109,14 @@ export QUAST_META=$QUAST_DIR/11B_metaspades
 export QUAST_LOGS_O_META=$QUAST_META/out
 export QUAST_LOGS_E_META=$QUAST_META/err
 # 12A CheckM2 - MEGAHIT
-export CHECKM_DIR=$WORKING_DIR/12_CHECKM2
-export CHECKM_MEGA=$CHECKM_DIR/12A_megahit
-export CHECKM_LOGS_O_MEGA=$CHECKM_MEGA/out
-export CHECKM_LOGS_E_MEGA=$CHECKM_MEGA/err
+export CHECKM2_DIR=$WORKING_DIR/12_CHECKM2
+export CHECKM2_MEGA=$CHECKM_DIR/12A_megahit
+export CHECKM2_LOGS_O_MEGA=$CHECKM_MEGA/out
+export CHECKM2_LOGS_E_MEGA=$CHECKM_MEGA/err
 # 12B CheckM2 - metaSPAdes
-export CHECKM_META=$CHECKM_DIR/12B_metaspades
-export CHECKM_LOGS_O_META=$CHECKM_META/out
-export CHECKM_LOGS_E_META=$CHECKM_META/err
+export CHECKM2_META=$CHECKM_DIR/12B_metaspades
+export CHECKM2_LOGS_O_META=$CHECKM_META/out
+export CHECKM2_LOGS_E_META=$CHECKM_META/err
 # 13 Read Taxonomy
 export READ_TAX_DIR=$WORKING_DIR/13_READ_TAXONOMY
 export READ_TAX_LOGS_O=$READ_TAX_DIR/out
@@ -149,8 +149,8 @@ export JOB9B="09B_metaspades_concoct"
 export JOB10="10_add_bin_nums"
 export JOB11A="11A_megahit_quast"
 export JOB11B="11B_metaspades_quast"
-export JOB12A="12A_megahit_checkm"
-export JOB12B="12B_metaspades_checkm"
+export JOB12A="12A_megahit_checkm2"
+export JOB12B="12B_metaspades_checkm2"
 export JOB13="13_read_taxonomy"
 export JOB14A="14A_megahit_contig_taxonomy"
 export JOB14B="14B_metaspades_contig_taxonomy"

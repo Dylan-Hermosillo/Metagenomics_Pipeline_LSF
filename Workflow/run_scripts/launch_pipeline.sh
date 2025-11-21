@@ -3,8 +3,8 @@
 #BSUB -W 12:00
 #BSUB -q "shared_memory"
 #BSUB -J launch_pipeline_lsf
-#BSUB -o launch_pipeline_lsf.%J.out
-#BSUB -e launch_pipeline_lsf.%J.err
+#BSUB -o ./launch_pipeline_lsf.%J.out
+#BSUB -e ./launch_pipeline_lsf.%J.err
 
 # NOTE: MAKE ALL PARAMETER CHANGES IN THE CONFIG.SH FILE!!!
 
@@ -20,7 +20,6 @@ if [[ ! -f ${XFILE} ]]; then
 fi
 # get number of jobs
 export NUM_JOB=$(wc -l < "${XFILE}")
-# --- End Housekeeping ---
 
 # --- Create File Structure ---
 # 01 In/Out for Wrapper Generation
@@ -50,14 +49,15 @@ create_dir $ADD_BIN_DIR $ADD_BIN_LOGS_O $ADD_BIN_LOGS_E
 create_dir $QUAST_DIR $QUAST_MEGA $QUAST_LOGS_O_MEGA $QUAST_LOGS_E_MEGA # MEGAHIT
 create_dir $QUAST_META $QUAST_LOGS_O_META $QUAST_LOGS_E_META # metaSPAdes
 # 12 CheckM2
-create_dir $CHECKM_DIR $CHECKM_MEGA $CHECKM_LOGS_O_MEGA $CHECKM_LOGS_E_MEGA # MEGAHIT
-create_dir $CHECKM_META $CHECKM_LOGS_O_META $CHECKM_LOGS_E_META # metaSPAdes
+create_dir $CHECKM_DIR2 $CHECKM2_MEGA $CHECKM2_LOGS_O_MEGA $CHECKM2_LOGS_E_MEGA # MEGAHIT
+create_dir $CHECKM2_META $CHECKM2_LOGS_O_META $CHECKM2_LOGS_E_META # metaSPAdes
 # 13 Reads Taxonomy Outputs
 create_dir $READ_TAX_DIR $READ_TAX_LOGS_O $READ_TAX_LOGS_E # Reads
 # 14 Contig Taxonomy Outputs
 create_dir $CONTIG_TAX_DIR $CONTIG_TAX_DIR_MEGA $CONTIG_LOGS_O_MEGA $CONTIG_LOGS_E_MEGA # MEGAHIT
 create_dir $CONTIG_TAX_DIR_META $CONTIG_LOGS_O_META $CONTIG_LOGS_E_META # metaSPAdes
 # --- End Create File Structure ---
+# --- End Housekeeping ---
 
 # --- Launch Pipeline Steps ---
 # Job 1: Generate LSF Wrappers
@@ -66,6 +66,7 @@ JOBID1=$(bsub -J "$JOB1[1-$NUM_JOB]%$NUM_JOB" \
      -n $JOB1_CPUS \
      -q $JOB1_QUEUE \
      -R "rusage[mem=$JOB1_MEMORY]" \
+     -M $JOB1_MEMORY \
      -o "${WRAP_LOGS_O}/wrapper.gen.%J.%I.log" \
      -e "${WRAP_LOGS_E}/wrapper.gen.%J.%I.err" \
      -W $JOB1_TIME \
@@ -102,6 +103,7 @@ JOBID3=$(bsub -J "$JOB3[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB3_CPUS \
     -q $JOB3_QUEUE \
     -R "rusage[mem=$JOB3_MEMORY]" \
+    -M $JOB3_MEMORY \
     -W $JOB3_TIME \
     -o "${FASTQC_LOGS_O}/fastqc.03.%J_%I.log" \
     -e "${FASTQC_LOGS_E}/fastqc.03.%J_%I.err" \
@@ -114,6 +116,7 @@ JOBID4=$(bsub -J "$JOB4[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB4_CPUS \
     -q $JOB4_QUEUE \
     -R "rusage[mem=$JOB4_MEMORY]" \
+    -M $JOB4_MEMORY \
     -W $JOB4_TIME \
     -w "done($JOBID3)" \
     -o "${TRIM_LOGS_O}/trim.04.%J_%I.log" \
@@ -127,6 +130,7 @@ JOBID5=$(bsub -J "$JOB5[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB5_CPUS \
     -q $JOB5_QUEUE \
     -R "rusage[mem=$JOB5_MEMORY]" \
+    -M $JOB5_MEMORY \
     -W $JOB5_TIME \
     -w "done($JOBID4)" \
     -o "${CONTAM_LOGS_O}/bowtie2.05.%J_%I.log" \
@@ -140,6 +144,7 @@ JOBID6=$(bsub -J "$JOB6[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB6_CPUS \
     -q $JOB6_QUEUE \
     -R "rusage[mem=$JOB6_MEMORY]" \
+    -M $JOB6_MEMORY \
     -W $JOB6_TIME \
     -w "done($JOBID4)" \
     -o "${FASTQC_AFTER_LOGS_O}/fastqc.06.%J_%I.log" \
@@ -153,6 +158,7 @@ JOBID7A=$(bsub -J "$JOB7A[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB7A_CPUS \
     -q $JOB7A_QUEUE \
     -R "rusage[mem=$JOB7A_MEMORY]" \
+    -M $JOB7A_MEMORY \
     -W $JOB7A_TIME \
     -w "done($JOBID5)" \
     -o "${MEGAHIT_LOGS_O}/megahit_assembly.07A.%J_%I.log" \
@@ -166,6 +172,7 @@ JOBID7B=$(bsub -J "$JOB7B[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB7B_CPUS \
     -q $JOB7B_QUEUE \
     -R "rusage[mem=$JOB7B_MEMORY]" \
+    -M $JOB7B_MEMORY \
     -W $JOB7B_TIME \
     -w "done($JOBID5)" \
     -o "${METASPADES_LOGS_O}/metaspades_assembly.07B.%J_%I.log" \
@@ -179,6 +186,7 @@ JOBID8A=$(bsub -J "$JOB8A[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB8A_CPUS \
     -q $JOB8A_QUEUE \
     -R "rusage[mem=$JOB8A_MEMORY]" \
+    -M $JOB8A_MEMORY \
     -W $JOB8A_TIME \
     -w "done($JOBID7A)" \
     -o "${ALIGN_MEGAHIT_LOGS_O}/megahit_alignment.08A.%J_%I.log" \
@@ -192,6 +200,7 @@ JOBID8B=$(bsub -J "$JOB8B[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB8B_CPUS \
     -q $JOB8B_QUEUE \
     -R "rusage[mem=$JOB8B_MEMORY]" \
+    -M $JOB8B_MEMORY \
     -W $JOB8B_TIME \
     -w "done($JOBID7B)" \
     -o "${ALIGN_METASPADES_LOGS_O}/metaspades_alignment.08B.%J_%I.log" \
@@ -205,6 +214,7 @@ JOBID9A=$(bsub -J "$JOB9A[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB9A_CPUS \
     -q $JOB9A_QUEUE \
     -R "rusage[mem=$JOB9A_MEMORY]" \
+    -M $JOB9A_MEMORY \
     -W $JOB9A_TIME \
     -w "done($JOBID8A)" \
     -o "${CONCOCT_LOGS_O_MEGA}/megahit_concoct.09A.%J_%I.log" \
@@ -214,15 +224,16 @@ echo "Submitted Job 9A array with ID $JOBID9A"
 
 # Job 9B: CONCOCT Binning (depends on 8B) - metaSPAdes
 echo "Launching Job 9B: CONCOCT Binning"
-JOBID9B=$(bsub -J "$JOB9A[1-$NUM_JOB]%$NUM_JOB" \
-    -n $JOB9A_CPUS \
-    -q $JOB9A_QUEUE \
-    -R "rusage[mem=$JOB9A_MEMORY]" \
-    -W $JOB9A_TIME \
+JOBID9B=$(bsub -J "$JOB9B[1-$NUM_JOB]%$NUM_JOB" \
+    -n $JOB9B_CPUS \
+    -q $JOB9B_QUEUE \
+    -R "rusage[mem=$JOB9B_MEMORY]" \
+    -M $JOB9B_MEMORY \
+    -W $JOB9B_TIME \
     -w "done($JOBID8B)" \
     -o "${CONCOCT_LOGS_O_META}/metaspades_concoct.09B.%J_%I.log" \
     -e "${CONCOCT_LOGS_E_META}/metaspades_concoct.09B.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB9A2}.sh | awk '{print $2}' | tr -d '<>[]')
+    < $RUN_SCRIPTS/${JOB9B}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 9B array with ID $JOBID9B"
 
 # Job 10: Add Bin Numbers (depends on 9A & 9B)
@@ -231,6 +242,7 @@ JOBID10=$(bsub -J "$JOB10[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB10_CPUS \
     -q $JOB10_QUEUE \
     -R "rusage[mem=$JOB10_MEMORY]" \
+    -M $JOB10_MEMORY \
     -W $JOB10_TIME \
     -w "done($JOBID9A) && done($JOBID9B)" \
     -o "${ADD_BIN_LOGS_O}/add_bin_nums.10.%J_%I.log" \
@@ -244,6 +256,7 @@ JOBID11A=$(bsub -J "$JOB11A[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB11A_CPUS \
     -q $JOB11A_QUEUE \
     -R "rusage[mem=$JOB11A_MEMORY]" \
+    -M $JOB11A_MEMORY \
     -W $JOB11A_TIME \
     -w "done($JOBID9A)" \
     -o "${QUAST_LOGS_O_MEGA}/megahit_quast.11A.%J_%I.log" \
@@ -257,6 +270,7 @@ JOBID11B=$(bsub -J "$JOB11B[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB11B_CPUS \
     -q $JOB11B_QUEUE \
     -R "rusage[mem=$JOB11B_MEMORY]" \
+    -M $JOB11B_MEMORY \
     -W $JOB11B_TIME \
     -w "done($JOBID9B)" \
     -o "${QUAST_LOGS_O_META}/metaspades_quast.11B.%J_%I.log" \
@@ -270,11 +284,12 @@ JOBID12A=$(bsub -J "$JOB12A[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB12A_CPUS \
     -q $JOB12A_QUEUE \
     -R "rusage[mem=$JOB12A_MEMORY]" \
+    -M $JOB12A_MEMORY \
     -W $JOB12A_TIME \
     -w "done($JOBID9A)" \
     -o "${CHECKM_LOGS_O_MEGA}/megahit_checkm.12A.%J_%I.log" \
     -e "${CHECKM_LOGS_E_MEGA}/megahit_checkm.12A.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB9D1}.sh | awk '{print $2}' | tr -d '<>[]')
+    < $RUN_SCRIPTS/${JOB12A}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 12A array with ID $JOBID12A"
 
 # Job 12B: CheckM2 (depends on 9A2, runs concurrently with 9B/9C) metaSPAdes
@@ -283,19 +298,21 @@ JOBID12B=$(bsub -J "$JOB12B[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB12B_CPUS \
     -q $JOB12B_QUEUE \
     -R "rusage[mem=$JOB12B_MEMORY]" \
+    -M $JOB12B_MEMORY \
     -W $JOB12B_TIME \
     -w "done($JOBID9B)" \
     -o "${CHECKM_LOGS_O_META}/metaspades_checkm.12B.%J_%I.log" \
     -e "${CHECKM_LOGS_E_META}/metaspades_checkm.12B.%J_%I.err" \
-    < $RUN_SCRIPTS/${JOB9D2}.sh | awk '{print $2}' | tr -d '<>[]')
+    < $RUN_SCRIPTS/${JOB12B}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 9D array with ID $JOBID9D2"
 
-# Job 13A: Read Taxonomy (depends on 05, runs independently)
+# Job 13: Read Taxonomy (depends on 05, runs independently)
 echo "Launching Job 13: Read Taxonomy"
 JOBID13=$(bsub -J "$JOB13[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB13_CPUS \
     -q $JOB13_QUEUE \
     -R "rusage[mem=$JOB13_MEMORY]" \
+    -M $JOB13_MEMORY \
     -W $JOB13_TIME \
     -w "done($JOBID5)" \
     -o "${READ_TAX_LOGS_O}/read_taxonomy.13.%J_%I.log" \
@@ -309,6 +326,7 @@ JOBID14A=$(bsub -J "$JOB14A[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB14A_CPUS \
     -q $JOB14A_QUEUE \
     -R "rusage[mem=$JOB14A_MEMORY]" \
+    -M $JOB14A_MEMORY \
     -W $JOB14A_TIME \
     -w "done($JOBID7A)" \
     -o "${CONTIG_TAX_LOGS_O}/contig_taxonomy.14A.%J_%I.log" \
@@ -322,21 +340,22 @@ JOBID14B=$(bsub -J "$JOB14B[1-$NUM_JOB]%$NUM_JOB" \
     -n $JOB14B_CPUS \
     -q $JOB14B_QUEUE \
     -R "rusage[mem=$JOB14B_MEMORY]" \
+    -M $JOB14B_MEMORY \
     -W $JOB14B_TIME \
-    -w "done($JOBID7A)" \
+    -w "done($JOBID7B)" \
     -o "${CONTIG_TAX_LOGS_O}/contig_taxonomy.14A.%J_%I.log" \
     -e "${CONTIG_TAX_LOGS_E}/contig_taxonomy.14A.%J_%I.err" \
     < $RUN_SCRIPTS/${JOB14B}.sh | awk '{print $2}' | tr -d '<>[]')
 echo "Submitted Job 14B array with ID $JOBID14B"
 
-# --- End Launch Pipeline Steps ---
+# --- End Workflow Steps ---
 echo ""
 echo "All jobs submitted successfully!"
-echo "Pipeline flow:"
-echo "  1 → 2 → 3 → 4 → 5 → (7A & 7B) & 10A"
-echo "              ↓           ↓       ↓"
-echo "              6          8A      10B"
+echo "Pipeline flow (A=MEGAHIT, B=metaSPAdes):"
+echo "  1 → 2 → 3 → 4 → 5 → (7A & 7B) -> (14A & 14B)"
+echo "              ↓           ↓       "
+echo "              6       (8A & 8B)"
+echo "              ↓            ↓"
+echo "              13      (9A & 9B) → (10) → (11A & 11B)"
 echo "                          ↓"
-echo "                         9A1/2 → 9B1/2 → 9C1/2 (1=MEGAHIT, 2=metaSPAdes)"
-echo "                          ↓"
-echo "                         9D1/2 (1=MEGAHIT, 2=metaSPAdes)"
+echo "                      (12A & 12B)"
