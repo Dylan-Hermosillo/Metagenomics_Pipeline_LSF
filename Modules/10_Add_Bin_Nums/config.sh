@@ -5,7 +5,7 @@ export WORKING_DIR=/share/ivirus/dhermos/pipeline_test # where I want all the ou
 export XFILE=$WORKING_DIR/test_data/test_data.txt
 # ---- Directory Structure ----
 # 10 Add Bin Numbers
-export ADD_BIN_DIR=$BINNING_DIR/10_ADD_BIN_NUMS
+export ADD_BIN_DIR=$WORKING_DIR/10_ADD_BIN_NUMS
 export ADD_BIN_LOGS_O=$ADD_BIN_DIR/out
 export ADD_BIN_LOGS_E=$ADD_BIN_DIR/err
 # --- Job Parameters ---

@@ -9,7 +9,7 @@ export WORKING_DIR=/share/ivirus/dhermos/pipeline_test # where I want all the ou
 export XFILE=$WORKING_DIR/test_data/test_data.txt
 # ---- Directory Structure ----
 # 09B CONCOCT Binning - metaSPAdes
-export CONCOCT_META=$BINNING_DIR/09A_concoct_metaspades
+export CONCOCT_META=$BINNING_DIR/09B_concoct_metaspades
 export CONCOCT_LOGS_O_META=$CONCOCT_META/out
 export CONCOCT_LOGS_E_META=$CONCOCT_META/err
 

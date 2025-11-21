@@ -18,7 +18,7 @@ NAME=${names[${JOBINDEX}]}
 CONTIGS="${MEGAHIT_DIR}/${NAME}/final.contigs.fa"
 
 # Output directories
-OUTDIR="${CONTIG_TAX_DIR}/${NAME}"
+OUTDIR="${CONTIG_TAX_DIR_META}/${NAME}"
 HUMAN_CONTIG_DIR="${OUTDIR}/human_contigs"
 NONHUMAN_CONTIG_DIR="${OUTDIR}/nonhuman_contigs"
 

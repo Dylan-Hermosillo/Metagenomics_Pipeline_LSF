@@ -501,9 +501,9 @@ This document describes the expected directory structure and file outputs for ea
 ```
 12_CHECKM2/12A_megahit/
 ├── out/
-│   └── checkm.12A.{JOBID}_{ARRAY_INDEX}.log
+│   └── CHECKM2.12A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── checkm.12A.{JOBID}_{ARRAY_INDEX}.err
+│   └── CHECKM2.12A.{JOBID}_{ARRAY_INDEX}.err
 └── ERR81/
     ├── quality_report.tsv            ← Primary quality metrics
     ├── protein_files/
@@ -529,9 +529,9 @@ This document describes the expected directory structure and file outputs for ea
 ```
 12_CHECKM2/12B_metaspades/
 ├── out/
-│   └── checkm.12B.{JOBID}_{ARRAY_INDEX}.log
+│   └── CHECKM2.12B.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── checkm.12B.{JOBID}_{ARRAY_INDEX}.err
+│   └── CHECKM2.12B.{JOBID}_{ARRAY_INDEX}.err
 └── ERR81/
     ├── quality_report.tsv            ← Primary quality metrics
     ├── protein_files/
