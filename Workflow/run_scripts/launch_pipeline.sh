@@ -304,7 +304,7 @@ JOBID12B=$(bsub -J "$JOB12B[1-$NUM_JOB]%$NUM_JOB" \
     -o "${CHECKM_LOGS_O_META}/metaspades_checkm.12B.%J_%I.log" \
     -e "${CHECKM_LOGS_E_META}/metaspades_checkm.12B.%J_%I.err" \
     < $RUN_SCRIPTS/${JOB12B}.sh | awk '{print $2}' | tr -d '<>[]')
-echo "Submitted Job 9D array with ID $JOBID9D2"
+echo "Submitted Job 12B array with ID $JOBID9D2"
 
 # Job 13: Read Taxonomy (depends on 05, runs independently)
 echo "Launching Job 13: Read Taxonomy"
