@@ -15,7 +15,7 @@ names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 
 # Input contigs
-CONTIGS="${MEGAHIT_DIR}/${NAME}/final.contigs.fa"
+CONTIGS="${METASPADES_DIR}/${NAME}/final.contigs.fa"
 
 # Output directories
 OUTDIR="${CONTIG_TAX_DIR_META}/${NAME}"
@@ -36,8 +36,9 @@ echo "Processing ${NAME}"
 module load apptainer
 
 # Run Kraken2
-apptainer exec --bind ${OUTDIR}:${OUTDIR},${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${METASPADES_DIR}:${METASPADES_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
     kraken2 --db ${KRAKEN2_DB} \
+    --memory-mapping \
     --classified-out ${OUTDIR}/cseqs#.fa \
     --output ${OUTDIR}/kraken_results.txt \
     --report ${OUTDIR}/kraken_report.txt \
@@ -57,7 +58,7 @@ TAXID=9606
 HUMAN_CONTIGS="${HUMAN_CONTIG_DIR}/contigs.fa"
 BRACKEN_REPORT="${OUTDIR}/kraken_report_bracken_species.txt"
 
-apptainer exec --bind ${OUTDIR}:${OUTDIR},${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR} $KRAKENTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${METASPADES_DIR}:${METASPADES_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR} $KRAKENTOOLS \
     extract_kraken_reads.py -k ${RESULTS} \
     -r ${BRACKEN_REPORT} -s1 ${CONTIGS} \
     --taxid ${TAXID} -o ${HUMAN_CONTIGS} \
@@ -70,7 +71,7 @@ fi
 # Extract non-human contigs
 NONHUMAN_CONTIGS="${NONHUMAN_CONTIG_DIR}/contigs.fa"
 
-apptainer exec --bind ${OUTDIR}:${OUTDIR},${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR} $KRAKENTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${METASPADES_DIR}:${METASPADES_DIR},${CONTIG_TAX_DIR}:${CONTIG_TAX_DIR} $KRAKENTOOLS \
     extract_kraken_reads.py -k ${RESULTS} \
     -r ${BRACKEN_REPORT} -s1 ${CONTIGS} \
     --taxid ${TAXID} -o ${NONHUMAN_CONTIGS} \
