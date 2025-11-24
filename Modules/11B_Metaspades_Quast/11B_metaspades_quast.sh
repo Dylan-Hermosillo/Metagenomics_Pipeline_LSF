@@ -19,7 +19,7 @@ OUTDIR="${QUAST_META}/${NAME}"
 mkdir -p $OUTDIR
 
 # Concatenated contigs from binning
-CONCOCT_CONTIGS="${CONCOCT_META}/${NAME}.all_contigs.fna"
+CONCOCT_CONTIGS="${CONCOCT_META}/${NAME}/${NAME}.all_contigs.fna"
 
 if [[ ! -f $CONCOCT_CONTIGS ]]; then
     echo "Error: Concatenated contigs not found for ${NAME}"

@@ -92,7 +92,7 @@ export CONCOCT_MEGA=$BINNING_DIR/09A_concoct_megahit
 export CONCOCT_LOGS_O_MEGA=$CONCOCT_MEGA/out
 export CONCOCT_LOGS_E_MEGA=$CONCOCT_MEGA/err
 # 09B CONCOCT Binning - metaSPAdes
-export CONCOCT_META=$BINNING_DIR/09A_concoct_metaspades
+export CONCOCT_META=$BINNING_DIR/09B_concoct_metaspades
 export CONCOCT_LOGS_O_META=$CONCOCT_META/out
 export CONCOCT_LOGS_E_META=$CONCOCT_META/err
 # 10 Add Bin Numbers

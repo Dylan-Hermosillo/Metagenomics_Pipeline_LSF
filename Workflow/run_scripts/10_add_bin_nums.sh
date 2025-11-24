@@ -27,7 +27,7 @@ if [[ -d "$BIN_DIR" ]]; then
     for file in *.fa; do
         if [[ -f "$file" ]]; then
             num=$(echo $file | sed 's/.fa//')
-            cat $num.fa | sed -e "s/^>/>${num}_/" >> ${CONCOCT_MEGA}/${NAME}.all_contigs.fna
+            cat $num.fa | sed -e "s/^>/>${num}_/" >> ${CONCOCT_MEGA}/${NAME}/${NAME}.all_contigs.fna
         fi
     done
     echo "Completed MEGAHIT bins for ${NAME}"
@@ -46,7 +46,7 @@ if [[ -d "$BIN_DIR" ]]; then
     for file in *.fa; do
         if [[ -f "$file" ]]; then
             num=$(echo $file | sed 's/.fa//')
-            cat $num.fa | sed -e "s/^>/>${num}_/" >> ${CONCOCT_META}/${NAME}.all_contigs.fna
+            cat $num.fa | sed -e "s/^>/>${num}_/" >> ${CONCOCT_META}/${NAME}/${NAME}.all_contigs.fna
         fi
     done
     echo "Completed metaSPAdes bins for ${NAME}"
