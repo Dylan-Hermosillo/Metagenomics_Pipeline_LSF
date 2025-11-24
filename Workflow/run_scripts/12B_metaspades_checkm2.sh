@@ -36,7 +36,7 @@ echo "Processing ${NUM_BINS} bins for ${NAME}"
 
 # Run CheckM2
 module load apptainer
-apptainer exec --bind ${CONCOCT_META}:${CONCOCT_META},${CHECKM_DIR}:${CHECKM_DIR},${CHECKM2_DB}:${CHECKM2_DB} $CHECKM2 \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONCOCT_META}:${CONCOCT_META},${CHECKM_DIR}:${CHECKM_DIR},${CHECKM2_DB}:${CHECKM2_DB} $CHECKM2 \
     checkm2 predict --threads $JOB12B_CPUS \
     --input $BINS_DIR \
     -x fa \

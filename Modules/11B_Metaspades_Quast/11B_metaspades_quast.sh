@@ -30,7 +30,7 @@ echo "Processing ${NAME}"
 
 # Run QUAST
 module load apptainer
-apptainer exec --bind ${CONCOCT_META}:${CONCOCT_META},${QUAST_META}:${QUAST_META} $QUAST \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONCOCT_META}:${CONCOCT_META},${QUAST_META}:${QUAST_META} $QUAST \
     quast -t $JOB11B_CPUS \
     -o $OUTDIR \
     -m 500 \

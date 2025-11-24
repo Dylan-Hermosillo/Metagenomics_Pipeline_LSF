@@ -36,23 +36,23 @@ echo "Processing ${NAME}"
 
 # Index assembly
 module load apptainer
-apptainer exec --bind ${METASPADES_DIR}:${METASPADES_DIR} $BWA \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${METASPADES_DIR}:${METASPADES_DIR} $BWA \
     bwa index ${CONTIGS}
 
 # Align reads
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES_DIR},${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $BWA \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES_DIR},${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $BWA \
     bwa mem -t $JOB8B_CPUS ${CONTIGS} ${PAIR1} ${PAIR2} > ${OUTDIR}/result.sam
 
 # Convert to BAM
-apptainer exec --bind ${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $SAMTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $SAMTOOLS \
     samtools view -b -F 4 ${OUTDIR}/result.sam > ${OUTDIR}/result.bam
 
 # Sort BAM
-apptainer exec --bind ${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $SAMTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $SAMTOOLS \
     samtools sort ${OUTDIR}/result.bam > ${OUTDIR}/sorted.bam
 
 # Index BAM
-apptainer exec --bind ${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $SAMTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR} $SAMTOOLS \
     samtools index ${OUTDIR}/sorted.bam
 
 # Clean up

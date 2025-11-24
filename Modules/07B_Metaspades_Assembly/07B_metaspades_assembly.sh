@@ -22,7 +22,7 @@ PAIR2=${CONTAM_DIR}/${NAME}_2.fastq.gz
 
 # Run metaSPAdes
 module load apptainer
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES_DIR} $SPADES \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONTAM_DIR}:${CONTAM_DIR},${METASPADES_DIR}:${METASPADES_DIR} $SPADES \
     metaspades.py \
     -1 $PAIR1 \
     -2 $PAIR2 \

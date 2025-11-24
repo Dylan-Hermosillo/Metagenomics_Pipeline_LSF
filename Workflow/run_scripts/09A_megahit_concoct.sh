@@ -42,7 +42,7 @@ module load apptainer
 
 # Cut contigs into chunks
 echo "Starting cut_up_fasta.py"
-apptainer exec --bind ${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
     cut_up_fasta.py ${CONTIGS} \
     --chunk_size ${CONCOCT_CHUNK_SIZE} \
     --overlap_size 0 \
@@ -52,12 +52,12 @@ apptainer exec --bind ${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_ME
 
 # Generate coverage table
 echo "Starting concoct_coverage_table.py"
-apptainer exec --bind ${ALIGN_MEGAHIT_DIR}:${ALIGN_MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${ALIGN_MEGAHIT_DIR}:${ALIGN_MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
     concoct_coverage_table.py ${OUTDIR}/contigs_10k.bed ${SORTED_BAM} > ${OUTDIR}/coverage_table.tsv
 
 # Run CONCOCT
 echo "Starting concoct"
-apptainer exec --bind ${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
     concoct --threads $JOB9A_CPUS \
     --composition_file ${OUTDIR}/contigs_10k.fa \
     --coverage_file ${OUTDIR}/coverage_table.tsv \
@@ -65,13 +65,13 @@ apptainer exec --bind ${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
 
 # Merge clustering
 echo "Starting merge_cutup_clustering.py"
-apptainer exec --bind ${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
     merge_cutup_clustering.py ${OUTDIR}/clustering_gt1000.csv > ${OUTDIR}/clustering_merged.csv
 
 # Extract bins
 echo "Starting extract_fasta_bins.py"
 mkdir -p ${OUTDIR}/fasta_bins
-apptainer exec --bind ${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${MEGAHIT_DIR}:${MEGAHIT_DIR},${CONCOCT_MEGA}:${CONCOCT_MEGA} $CONCOCT \
     extract_fasta_bins.py ${CONTIGS} ${OUTDIR}/clustering_merged.csv --output_path ${OUTDIR}/fasta_bins
 
 NUM_BINS=$(ls ${OUTDIR}/fasta_bins/*.fa 2>/dev/null | wc -l)

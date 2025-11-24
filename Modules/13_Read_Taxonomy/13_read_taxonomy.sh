@@ -34,7 +34,7 @@ echo "Input: ${PAIR2}"
 module load apptainer
 
 # Run Kraken2
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $KRAKEN2 \
     kraken2 --db ${KRAKEN2_DB} --paired \
     --memory-mapping \
     --classified-out ${OUTDIR}/cseqs#.fq \
@@ -46,7 +46,7 @@ apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR
 # Run Bracken
 REPORT="${OUTDIR}/kraken_report.txt"
 RESULTS="${OUTDIR}/kraken_results.txt"
-apptainer exec --bind ${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $BRACKEN \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${READ_TAX_DIR}:${READ_TAX_DIR},${KRAKEN2_DB}:${KRAKEN2_DB} $BRACKEN \
     est_abundance.py -i ${REPORT} \
     -o ${OUTDIR}/bracken_results.txt \
     -k ${KRAKEN2_DB}/database${KRAKEN2_KMER_SIZE}mers.kmer_distrib
@@ -57,7 +57,7 @@ HUMAN_R1="${HUMAN_READ_DIR}/r1.fq"
 HUMAN_R2="${HUMAN_READ_DIR}/r2.fq"
 BRACKEN_REPORT="${OUTDIR}/kraken_report_bracken_species.txt"
 
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR} $KRAKENTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR} $KRAKENTOOLS \
     extract_kraken_reads.py -k ${RESULTS} \
     -r ${BRACKEN_REPORT} -s1 ${PAIR1} -s2 ${PAIR2} \
     --taxid ${TAXID} -o ${HUMAN_R1} -o2 ${HUMAN_R2} \
@@ -70,7 +70,7 @@ gzip ${HUMAN_R2}
 NONHUMAN_R1="${NONHUMAN_READ_DIR}/r1.fq"
 NONHUMAN_R2="${NONHUMAN_READ_DIR}/r2.fq"
 
-apptainer exec --bind ${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR} $KRAKENTOOLS \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONTAM_DIR}:${CONTAM_DIR},${READ_TAX_DIR}:${READ_TAX_DIR} $KRAKENTOOLS \
     extract_kraken_reads.py -k ${RESULTS} \
     -r ${BRACKEN_REPORT} -s1 ${PAIR1} -s2 ${PAIR2} \
     --taxid ${TAXID} -o ${NONHUMAN_R1} -o2 ${NONHUMAN_R2} \

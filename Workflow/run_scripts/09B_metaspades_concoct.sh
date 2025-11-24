@@ -42,7 +42,7 @@ module load apptainer
 
 # Cut contigs into chunks
 echo "Starting cut_up_fasta.py"
-apptainer exec --bind ${METASPADES_DIR}:${METASPADES_DIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${METASPADES_DIR}:${METASPADES_DIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
     cut_up_fasta.py ${CONTIGS} \
     --chunk_size ${CONCOCT_CHUNK_SIZE} \
     --overlap_size 0 \
@@ -52,12 +52,12 @@ apptainer exec --bind ${METASPADES_DIR}:${METASPADES_DIR},${CONCOCT_META}:${CONC
 
 # Generate coverage table
 echo "Starting concoct_coverage_table.py"
-apptainer exec --bind ${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${ALIGN_METASPADES_DIR}:${ALIGN_METASPADES_DIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
     concoct_coverage_table.py ${OUTDIR}/contigs_10k.bed ${SORTED_BAM} > ${OUTDIR}/coverage_table.tsv
 
 # Run CONCOCT
 echo "Starting concoct"
-apptainer exec --bind ${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
     concoct --threads $JOB9B_CPUS \
     --composition_file ${OUTDIR}/contigs_10k.fa \
     --coverage_file ${OUTDIR}/coverage_table.tsv \
@@ -65,13 +65,13 @@ apptainer exec --bind ${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
 
 # Merge clustering
 echo "Starting merge_cutup_clustering.py"
-apptainer exec --bind ${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
     merge_cutup_clustering.py ${OUTDIR}/clustering_gt1000.csv > ${OUTDIR}/clustering_merged.csv
 
 # Extract bins
 echo "Starting extract_fasta_bins.py"
 mkdir -p ${OUTDIR}/fasta_bins
-apptainer exec --bind ${METASPADES_DIR}:${METASPADES_DIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${METASPADES_DIR}:${METASPADES_DIR},${CONCOCT_META}:${CONCOCT_META} $CONCOCT \
     extract_fasta_bins.py ${CONTIGS} ${OUTDIR}/clustering_merged.csv --output_path ${OUTDIR}/fasta_bins
 
 NUM_BINS=$(ls ${OUTDIR}/fasta_bins/*.fa 2>/dev/null | wc -l)
