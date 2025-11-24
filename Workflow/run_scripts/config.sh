@@ -59,6 +59,10 @@ export TRIMMED=$TRIM_DIR/trimmed_reads
 export UNPAIRED=$TRIM_DIR/unpaired_reads
 export TRIM_LOGS_O=$TRIM_DIR/out
 export TRIM_LOGS_E=$TRIM_DIR/err
+export TRIM_ILLUMINACLIP="2:30:10"  # seed mismatches:palindrome threshold:simple threshold
+export TRIM_SLIDINGWINDOW="4:20"    # window size:quality threshold
+export TRIM_MINLEN="100"            # minimum read length
+export TRIM_HEADCROP="10"           # bases to remove from start
 # 05 Bowtie2 Decontamination Outputs
 export CONTAM_DIR=$WORKING_DIR/05_BOWTIE2
 export CONTAM_LOGS_O=$CONTAM_DIR/out
