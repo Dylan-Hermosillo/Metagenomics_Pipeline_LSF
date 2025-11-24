@@ -4,15 +4,13 @@ This document describes the modular metagenomics LSF pipeline. All changes shoul
 
 Ensure all run_scripts are given execution rights and launch the job directly: **(./launch_pipeline.sh)**
 
-This pipeline has two options; 
-1) Workflow that runs in it's entirety.
-2) Modular that can run independent steps.
+This pipeline runs the complete workflow with proper dependency chains between all steps.
 
 ## PIPELINE STRUCTURE (Steps 01-14B):
 
 ```
 01. Wrapper Generation
-02. SRA Download
+02. SRA Download (Parallel Execution)
 03. FastQC Before Trim
 04. Trimmomatic
 05. Bowtie2 Decontamination
@@ -22,52 +20,35 @@ This pipeline has two options;
 08A. Align to MEGAHIT
 08B. Align to metaSPAdes (parallel with 08A)
 09A. CONCOCT Binning MEGAHIT
-09B. CONCOCT Binning metaSPAdes
-10. Add Bin Numbers (all samples, non-array)
+09B. CONCOCT Binning metaSPAdes (parallel with 09A)
+10. Add Bin Numbers (array job, processes both MEGAHIT and metaSPAdes)
 11A. QUAST on Concatenated Bins MEGAHIT
-11B. QUAST on Concatenated Bins metaSPAdes
+11B. QUAST on Concatenated Bins metaSPAdes (parallel with 11A)
 12A. CheckM2 on Bins MEGAHIT
-12B. CheckM2 on Bins metaSPAdes
+12B. CheckM2 on Bins metaSPAdes (parallel with 12A)
 13. Read Taxonomy (Kraken2/Bracken)
 14A. Contig Taxonomy MEGAHIT (Kraken2/Bracken)
-14B. Contig Taxonomy metaSPAdes (Kraken2/Bracken)
+14B. Contig Taxonomy metaSPAdes (Kraken2/Bracken, parallel with 14A)
 ```
+
 ## Dependency Graph:
 ```
-01_wrapper_gen → 02_SRA_pull → 03_fastqc_before → 04_trimmomatic → 05_bowtie2
-                                                           ↓
-                                                    06_fastqc_after
-                                                           ↓
-                                          ┌──────── 07A_megahit ────────┐
-                                          │              ↓              │
-                                          │      08A_alignment          │
-                                          │              ↓              │
-                                          │       09A_concoct           │
-                                          │           ↓  ↓  ↓           │
-                                          │    11A_quast │ 12A_checkm2  │
-                                          │              ↓              │
-                                          │       10_add_bin_nums       │
-                                          │                             │
-                                          │      14A_contig_taxonomy    │
-                                          └─────────────────────────────┘
-                                          
-                                          ┌────── 07B_metaspades ───────┐
-                                          │              ↓              │
-                                          │      08B_alignment          │
-                                          │              ↓              │
-                                          │       09B_concoct           │
-                                          │           ↓  ↓  ↓           │
-                                          │    11B_quast │ 12B_checkm2  │
-                                          │              ↓              │
-                                          │       10_add_bin_nums       │
-                                          │                             │
-                                          │      14B_contig_taxonomy    │
-                                          └─────────────────────────────┘
-                                                         
-                                 05_bowtie2 → 13_read_taxonomy                            
+01 → 02 → 03 → 04 → 05 ─────────────────┐
+              ↓       ↓                   ↓
+              06      ├─→ 07A → 08A → 09A ┤
+                      │    ↓              ├─→ 10 → 11A
+                      │   14A             └────────→ 12A
+                      │
+                      ├─→ 07B → 08B → 09B ┤
+                      │    ↓              ├─→ 10 → 11B
+                      │   14B             └────────→ 12B
+                      │
+                      └─→ 13
 ```
+
 ## File List:
 ```
+PIPELINE SCRIPTS:
 01_wrapper_gen.sh
 03_fastqc_before.sh
 04_trimmomatic.sh
@@ -86,7 +67,7 @@ This pipeline has two options;
 12B_metaspades_checkm2.sh
 13_read_taxonomy.sh
 14A_megahit_contig_taxonomy.sh
-14B_metaspades_contig_taxonomy.sh    
+14B_metaspades_contig_taxonomy.sh
 
 CONFIGURATION & LAUNCHER:
 config.sh             - Complete config with all variables
@@ -99,21 +80,63 @@ launch_pipeline.sh    - Complete launcher with all jobs
 
 | Output File | Produced By | Used By |
 |------------|-------------|---------|
-| `ERR81_1.fastq.gz`, `ERR81_2.fastq.gz` | JOB5 | JOB7A, JOB7B, JOB8A, JOB8B, JOB13 |
+| `ERR9751998_1.fastq`, `ERR9751998_2.fastq` | JOB2 | JOB3 |
+| `ERR9751998_R1_paired.fastq.gz`, `ERR9751998_R2_paired.fastq.gz` | JOB4 | JOB5, JOB6 |
+| `ERR9751998_1.fastq.gz`, `ERR9751998_2.fastq.gz` (clean) | JOB5 | JOB7A, JOB7B, JOB8A, JOB8B, JOB13 |
 | `final.contigs.fa` (MEGAHIT) | JOB7A | JOB8A, JOB14A |
 | `contigs.fasta` (metaSPAdes) | JOB7B | JOB8B, JOB14B |
 | `sorted.bam` (MEGAHIT) | JOB8A | JOB9A |
 | `sorted.bam` (metaSPAdes) | JOB8B | JOB9B |
 | `fasta_bins/*.fa` (MEGAHIT) | JOB9A | JOB10, JOB12A |
 | `fasta_bins/*.fa` (metaSPAdes) | JOB9B | JOB10, JOB12B |
-| `ERR81.all_contigs.fna` (MEGAHIT) | JOB10 | JOB11A |
-| `ERR81.all_contigs.fna` (metaSPAdes) | JOB10 | JOB11B |
+| `ERR9751998.all_contigs.fna` (MEGAHIT) | JOB10 | JOB11A |
+| `ERR9751998.all_contigs.fna` (metaSPAdes) | JOB10 | JOB11B |
 
 ---
-# Pipeline Output Directory Structure for Sample ERR81
+
+# Pipeline Output Directory Structure for Sample ERR9751998
 
 ## Overview
-This document describes the expected directory structure and file outputs for each pipeline step using sample accession ID `ERR81`.
+This document describes the expected directory structure and file outputs for each pipeline step using sample accession ID `ERR9751998`.
+
+---
+
+## JOB1: Wrapper Generation
+**Purpose:** Generate wrapper scripts for SRA prefetch and fasterq-dump
+
+```
+01_WRAPPER_GEN/
+├── out/
+│   └── wrapper.gen.{JOBID}.{ARRAY_INDEX}.log
+├── err/
+│   └── wrapper.gen.{JOBID}.{ARRAY_INDEX}.err
+└── scripts/
+    └── ERR9751998_prefetch_wrapper.sh
+```
+
+**Output Used By:**
+- Wrapper scripts aggregated in `run_scripts/aggregate_prefetch_wrappers.txt` for JOB2
+
+---
+
+## JOB2: SRA Download (Parallel Execution)
+**Purpose:** Download and extract FASTQ files from SRA
+
+```
+02_SRA_TOOLKIT/
+├── out/
+│   ├── ERR9751998_prefetch.log
+│   └── ERR9751998_fasterq.log
+├── err/
+│   ├── ERR9751998_prefetch.err
+│   └── ERR9751998_fasterq.err
+└── ERR9751998/
+    └── ERR9751998/
+        ├── ERR9751998_1.fastq        ← Used by JOB3
+        └── ERR9751998_2.fastq        ← Used by JOB3
+```
+
+**Note:** Runs on login node with `xargs -P 6` parallelization
 
 ---
 
@@ -127,15 +150,16 @@ This document describes the expected directory structure and file outputs for ea
 ├── err/
 │   └── fastqc.03.{JOBID}_{ARRAY_INDEX}.err
 ├── htmls/
-│   ├── ERR81_1_fastqc.html
-│   └── ERR81_2_fastqc.html
-├── ERR81_1_fastqc.zip
-└── ERR81_2_fastqc.zip
+│   ├── ERR9751998_1_fastqc.html
+│   └── ERR9751998_2_fastqc.html
+└── ERR9751998/
+    ├── ERR9751998_1_fastqc.zip
+    └── ERR9751998_2_fastqc.zip
 ```
 
 **Input Dependencies:**
-- `02_SRA_TOOLKIT/ERR81/ERR81/ERR81_1.fastq`
-- `02_SRA_TOOLKIT/ERR81/ERR81/ERR81_2.fastq`
+- `02_SRA_TOOLKIT/ERR9751998/ERR9751998/ERR9751998_1.fastq`
+- `02_SRA_TOOLKIT/ERR9751998/ERR9751998/ERR9751998_2.fastq`
 
 ---
 
@@ -149,19 +173,22 @@ This document describes the expected directory structure and file outputs for ea
 ├── err/
 │   └── trim.04.{JOBID}_{ARRAY_INDEX}.err
 ├── trimmed_reads/
-│   ├── ERR81_R1_paired.fastq.gz      ← Used by downstream steps
-│   └── ERR81_R2_paired.fastq.gz      ← Used by downstream steps
+│   ├── ERR9751998_R1_paired.fastq.gz      ← Used by JOB5, JOB6
+│   └── ERR9751998_R2_paired.fastq.gz      ← Used by JOB5, JOB6
 └── unpaired_reads/
-    ├── ERR81_R1_unpaired.fastq.gz
-    └── ERR81_R2_unpaired.fastq.gz
+    ├── ERR9751998_R1_unpaired.fastq.gz
+    └── ERR9751998_R2_unpaired.fastq.gz
 ```
 
 **Input Dependencies:**
-- `02_SRA_TOOLKIT/ERR81/ERR81/ERR81_1.fastq`
-- `02_SRA_TOOLKIT/ERR81/ERR81/ERR81_2.fastq`
+- `02_SRA_TOOLKIT/ERR9751998/ERR9751998/ERR9751998_1.fastq`
+- `02_SRA_TOOLKIT/ERR9751998/ERR9751998/ERR9751998_2.fastq`
 
-**Key Outputs Used Downstream:**
-- Paired reads → JOB5, JOB6
+**Trimming Parameters:**
+- `ILLUMINACLIP`: Remove adapters (2:30:10)
+- `SLIDINGWINDOW`: Quality trimming (4:20)
+- `MINLEN`: Minimum length 100bp
+- `HEADCROP`: Remove first 10 bases
 
 ---
 
@@ -174,19 +201,19 @@ This document describes the expected directory structure and file outputs for ea
 │   └── bowtie2.05.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
 │   └── bowtie2.05.{JOBID}_{ARRAY_INDEX}.err
-├── ERR81_1.fastq.gz                  ← Clean reads (used by JOB7A/7B, JOB8A/8B, JOB13)
-├── ERR81_2.fastq.gz                  ← Clean reads (used by JOB7A/7B, JOB8A/8B, JOB13)
-└── ERR81_hostmap.log
+├── ERR9751998_1.fastq.gz                  ← Clean reads (used by JOB7A/7B, JOB8A/8B, JOB13)
+├── ERR9751998_2.fastq.gz                  ← Clean reads (used by JOB7A/7B, JOB8A/8B, JOB13)
+└── ERR9751998_hostmap.log
 ```
 
 **Input Dependencies:**
-- `04_TRIMMOMATIC/trimmed_reads/ERR81_R1_paired.fastq.gz`
-- `04_TRIMMOMATIC/trimmed_reads/ERR81_R2_paired.fastq.gz`
+- `04_TRIMMOMATIC/trimmed_reads/ERR9751998_R1_paired.fastq.gz`
+- `04_TRIMMOMATIC/trimmed_reads/ERR9751998_R2_paired.fastq.gz`
 
 **Key Outputs Used Downstream:**
 - Clean reads → JOB7A, JOB7B, JOB8A, JOB8B, JOB13
 
-**Note:** `ERR81_human_removed.sam` is created temporarily but deleted by the script.
+**Note:** `ERR9751998_human_removed.sam` is created temporarily but deleted by the script.
 
 ---
 
@@ -200,15 +227,16 @@ This document describes the expected directory structure and file outputs for ea
 ├── err/
 │   └── fastqc.06.{JOBID}_{ARRAY_INDEX}.err
 ├── htmls/
-│   ├── ERR81_R1_paired_fastqc.html
-│   └── ERR81_R2_paired_fastqc.html
-├── ERR81_R1_paired_fastqc.zip
-└── ERR81_R2_paired_fastqc.zip
+│   ├── ERR9751998_R1_paired_fastqc.html
+│   └── ERR9751998_R2_paired_fastqc.html
+└── ERR9751998/
+    ├── ERR9751998_R1_paired_fastqc.zip
+    └── ERR9751998_R2_paired_fastqc.zip
 ```
 
 **Input Dependencies:**
-- `04_TRIMMOMATIC/trimmed_reads/ERR81_R1_paired.fastq.gz`
-- `04_TRIMMOMATIC/trimmed_reads/ERR81_R2_paired.fastq.gz`
+- `04_TRIMMOMATIC/trimmed_reads/ERR9751998_R1_paired.fastq.gz`
+- `04_TRIMMOMATIC/trimmed_reads/ERR9751998_R2_paired.fastq.gz`
 
 ---
 
@@ -218,27 +246,21 @@ This document describes the expected directory structure and file outputs for ea
 ```
 07_ASSEMBLY/07A_megahit_assembly/
 ├── out/
-│   └── megahit.07A.{JOBID}_{ARRAY_INDEX}.log
+│   └── megahit_assembly.07A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── megahit.07A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── megahit_assembly.07A.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── final.contigs.fa              ← Primary assembly output (used by JOB8A, JOB14A)
     ├── intermediate_contigs/
-    ├── k21.contigs.fa
-    ├── k41.contigs.fa
-    ├── k61.contigs.fa
-    ├── k81.contigs.fa
-    ├── k99.contigs.fa
-    ├── k119.contigs.fa
-    ├── k141.contigs.fa
+    ├── k*.contigs.fa                 ← Various k-mer assemblies
     ├── options.json
     ├── checkpoints.txt
     └── log
 ```
 
 **Input Dependencies:**
-- `05_BOWTIE2/ERR81_1.fastq.gz`
-- `05_BOWTIE2/ERR81_2.fastq.gz`
+- `05_BOWTIE2/ERR9751998_1.fastq.gz`
+- `05_BOWTIE2/ERR9751998_2.fastq.gz`
 
 **Key Outputs Used Downstream:**
 - `final.contigs.fa` → JOB8A, JOB14A
@@ -251,19 +273,17 @@ This document describes the expected directory structure and file outputs for ea
 ```
 07_ASSEMBLY/07B_metaspades_assembly/
 ├── out/
-│   └── metaspades.07B.{JOBID}_{ARRAY_INDEX}.log
+│   └── metaspades_assembly.07B.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── metaspades.07B.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── metaspades_assembly.07B.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── contigs.fasta                 ← Primary assembly output (used by JOB8B, JOB14B)
     ├── scaffolds.fasta
     ├── assembly_graph.fastg
     ├── assembly_graph_with_scaffolds.gfa
     ├── before_rr.fasta
     ├── corrected/
-    ├── K21/
-    ├── K33/
-    ├── K55/
+    ├── K21/, K33/, K55/              ← k-mer directories
     ├── misc/
     ├── params.txt
     ├── spades.log
@@ -271,8 +291,8 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `05_BOWTIE2/ERR81_1.fastq.gz`
-- `05_BOWTIE2/ERR81_2.fastq.gz`
+- `05_BOWTIE2/ERR9751998_1.fastq.gz`
+- `05_BOWTIE2/ERR9751998_2.fastq.gz`
 
 **Key Outputs Used Downstream:**
 - `contigs.fasta` → JOB8B, JOB14B
@@ -280,140 +300,145 @@ This document describes the expected directory structure and file outputs for ea
 ---
 
 ## JOB8A: MEGAHIT Alignment
-**Purpose:** Align clean reads back to MEGAHIT assembly
+**Purpose:** Align clean reads back to MEGAHIT assembly using BWA
 
 ```
 08_ALIGNMENT/08A_megahit/
 ├── out/
-│   └── align_megahit.08A.{JOBID}_{ARRAY_INDEX}.log
+│   └── megahit_alignment.08A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── align_megahit.08A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
-    ├── sorted.bam                    ← Primary alignment output (used by JOB9A)
+│   └── megahit_alignment.08A.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
+    ├── sorted.bam                    ← Used by JOB9A
     └── sorted.bam.bai                ← BAM index
 ```
 
 **Input Dependencies:**
-- `07_ASSEMBLY/07A_megahit_assembly/ERR81/final.contigs.fa`
-- `05_BOWTIE2/ERR81_1.fastq.gz`
-- `05_BOWTIE2/ERR81_2.fastq.gz`
+- `05_BOWTIE2/ERR9751998_1.fastq.gz`
+- `05_BOWTIE2/ERR9751998_2.fastq.gz`
+- `07_ASSEMBLY/07A_megahit_assembly/ERR9751998/final.contigs.fa`
 
 **Key Outputs Used Downstream:**
 - `sorted.bam` → JOB9A
 
-**Note:** BWA index files (`.amb`, `.ann`, `.bwt`, `.pac`, `.sa`) created alongside `final.contigs.fa`
+**BWA Index Files Created:**
+- `final.contigs.fa.amb`, `.ann`, `.bwt`, `.pac`, `.sa`
+
+**Note:** `result.sam` and `result.bam` are deleted after processing
 
 ---
 
 ## JOB8B: metaSPAdes Alignment
-**Purpose:** Align clean reads back to metaSPAdes assembly
+**Purpose:** Align clean reads back to metaSPAdes assembly using BWA
 
 ```
 08_ALIGNMENT/08B_metaspades/
 ├── out/
-│   └── align_metaspades.08B.{JOBID}_{ARRAY_INDEX}.log
+│   └── metaspades_alignment.08B.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── align_metaspades.08B.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
-    ├── sorted.bam                    ← Primary alignment output (used by JOB9B)
+│   └── metaspades_alignment.08B.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
+    ├── sorted.bam                    ← Used by JOB9B
     └── sorted.bam.bai                ← BAM index
 ```
 
 **Input Dependencies:**
-- `07_ASSEMBLY/07B_metaspades_assembly/ERR81/contigs.fasta`
-- `05_BOWTIE2/ERR81_1.fastq.gz`
-- `05_BOWTIE2/ERR81_2.fastq.gz`
+- `05_BOWTIE2/ERR9751998_1.fastq.gz`
+- `05_BOWTIE2/ERR9751998_2.fastq.gz`
+- `07_ASSEMBLY/07B_metaspades_assembly/ERR9751998/contigs.fasta`
 
 **Key Outputs Used Downstream:**
 - `sorted.bam` → JOB9B
 
-**Note:** BWA index files (`.amb`, `.ann`, `.bwt`, `.pac`, `.sa`) created alongside `contigs.fasta`
+**BWA Index Files Created:**
+- `contigs.fasta.amb`, `.ann`, `.bwt`, `.pac`, `.sa`
+
+**Note:** `result.sam` and `result.bam` are deleted after processing
 
 ---
 
 ## JOB9A: MEGAHIT CONCOCT Binning
-**Purpose:** Bin MEGAHIT contigs into MAGs (Metagenome-Assembled Genomes)
+**Purpose:** Bin MEGAHIT contigs into MAGs using CONCOCT
 
 ```
 09_BINNING/09A_concoct_megahit/
 ├── out/
-│   └── concoct.09A.{JOBID}_{ARRAY_INDEX}.log
+│   └── megahit_concoct.09A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── concoct.09A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── megahit_concoct.09A.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── contigs_10k.fa
     ├── contigs_10k.bed
     ├── coverage_table.tsv
     ├── clustering_gt1000.csv
-    ├── clustering_merged.csv         ← Used by JOB10
+    ├── clustering_merged.csv         ← Final clustering
     ├── args.txt
     ├── log.txt
-    ├── original_data_gt1000.csv
-    ├── PCA_transformed_data_gt1000.csv
-    └── fasta_bins/                   ← Bin FASTAs (used by JOB10, JOB12A)
+    └── fasta_bins/                   ← Used by JOB10, JOB12A
         ├── 0.fa
         ├── 1.fa
         ├── 2.fa
-        ├── 3.fa
         └── ...
 ```
 
 **Input Dependencies:**
-- `07_ASSEMBLY/07A_megahit_assembly/ERR81/final.contigs.fa`
-- `08_ALIGNMENT/08A_megahit/ERR81/sorted.bam`
+- `07_ASSEMBLY/07A_megahit_assembly/ERR9751998/final.contigs.fa`
+- `08_ALIGNMENT/08A_megahit/ERR9751998/sorted.bam`
 
 **Key Outputs Used Downstream:**
 - `fasta_bins/*.fa` → JOB10, JOB12A
-- `clustering_merged.csv` → JOB10
+
+**Process:**
+1. Cut contigs into 10kb chunks
+2. Generate coverage table from BAM
+3. Cluster by composition + coverage
+4. Extract bins as separate FASTA files
 
 ---
 
 ## JOB9B: metaSPAdes CONCOCT Binning
-**Purpose:** Bin metaSPAdes contigs into MAGs
+**Purpose:** Bin metaSPAdes contigs into MAGs using CONCOCT
 
 ```
-09_BINNING/09A_concoct_metaspades/
+09_BINNING/09B_concoct_metaspades/
 ├── out/
-│   └── concoct.09A.{JOBID}_{ARRAY_INDEX}.log
+│   └── metaspades_concoct.09B.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── concoct.09A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── metaspades_concoct.09B.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── contigs_10k.fa
     ├── contigs_10k.bed
     ├── coverage_table.tsv
     ├── clustering_gt1000.csv
-    ├── clustering_merged.csv         ← Used by JOB10
+    ├── clustering_merged.csv         ← Final clustering
     ├── args.txt
     ├── log.txt
-    ├── original_data_gt1000.csv
-    ├── PCA_transformed_data_gt1000.csv
-    └── fasta_bins/                   ← Bin FASTAs (used by JOB10, JOB12B)
+    └── fasta_bins/                   ← Used by JOB10, JOB12B
         ├── 0.fa
         ├── 1.fa
         ├── 2.fa
-        ├── 3.fa
         └── ...
 ```
 
 **Input Dependencies:**
-- `07_ASSEMBLY/07B_metaspades_assembly/ERR81/contigs.fasta`
-- `08_ALIGNMENT/08B_metaspades/ERR81/sorted.bam`
+- `07_ASSEMBLY/07B_metaspades_assembly/ERR9751998/contigs.fasta`
+- `08_ALIGNMENT/08B_metaspades/ERR9751998/sorted.bam`
 
 **Key Outputs Used Downstream:**
 - `fasta_bins/*.fa` → JOB10, JOB12B
-- `clustering_merged.csv` → JOB10
 
 ---
 
 ## JOB10: Add Bin Numbers
-**Purpose:** Add bin identifiers to contig headers and concatenate all bins
+**Purpose:** Add bin numbers to contig headers and concatenate all bins
 
 ```
-09_BINNING
-├── 09A_concoct_megahit/
-│   └── ERR81.all_contigs.fna         ← Concatenated bins (used by JOB11A)
-└── 09A_concoct_metaspades/
-    └── ERR81.all_contigs.fna         ← Concatenated bins (used by JOB11B)
+09_BINNING/09A_concoct_megahit/ERR9751998/
+    └── ERR9751998.all_contigs.fna         ← Concatenated bins (used by JOB11A)
+
+09_BINNING/09B_concoct_metaspades/ERR9751998/
+    └── ERR9751998.all_contigs.fna         ← Concatenated bins (used by JOB11B)
+
 10_ADD_BIN_NUMS/
 ├── out/
 │   └── add_bin_nums.10.{JOBID}_{ARRAY_INDEX}.log
@@ -422,14 +447,18 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `09_BINNING/09A_concoct_megahit/ERR81/fasta_bins/*.fa`
-- `09_BINNING/09A_concoct_metaspades/ERR81/fasta_bins/*.fa`
+- `09_BINNING/09A_concoct_megahit/ERR9751998/fasta_bins/*.fa`
+- `09_BINNING/09B_concoct_metaspades/ERR9751998/fasta_bins/*.fa`
 
 **Key Outputs Used Downstream:**
-- `ERR81.all_contigs.fna` (MEGAHIT) → JOB11A
-- `ERR81.all_contigs.fna` (metaSPAdes) → JOB11B
+- `ERR9751998.all_contigs.fna` (MEGAHIT) → JOB11A
+- `ERR9751998.all_contigs.fna` (metaSPAdes) → JOB11B
 
-**Note:** Each contig header is modified from `>NODE_123` to `>0_NODE_123`, `>1_NODE_123`, etc.
+**Contig Header Transformation:**
+```
+Before (bin 0.fa):  >NODE_1_length_5432
+After:              >0_NODE_1_length_5432
+```
 
 ---
 
@@ -437,12 +466,12 @@ This document describes the expected directory structure and file outputs for ea
 **Purpose:** Assembly quality assessment for MEGAHIT bins
 
 ```
-11_QUAST/11A_megahit
+11_QUAST/11A_megahit/
 ├── out/
-│   └── quast.11A.{JOBID}_{ARRAY_INDEX}.log
+│   └── megahit_quast.11A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── quast.11A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── megahit_quast.11A.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── report.txt
     ├── report.html
     ├── report.pdf
@@ -454,13 +483,16 @@ This document describes the expected directory structure and file outputs for ea
     ├── basic_stats/
     │   ├── cumulative_plot.pdf
     │   ├── GC_content_plot.pdf
-    │   └── ERR81.all_contigs_GC_content_plot.pdf
+    │   └── ERR9751998.all_contigs_GC_content_plot.pdf
     ├── contigs_reports/
     └── quast.log
 ```
 
 **Input Dependencies:**
-- `09_BINNING/09A_concoct_megahit/ERR81.all_contigs.fna`
+- `09_BINNING/09A_concoct_megahit/ERR9751998/ERR9751998.all_contigs.fna`
+
+**Metrics Reported:**
+- N50, L50, total length, largest contig, GC content, etc.
 
 ---
 
@@ -468,12 +500,12 @@ This document describes the expected directory structure and file outputs for ea
 **Purpose:** Assembly quality assessment for metaSPAdes bins
 
 ```
-11_QUAST/1B_metaspades/
+11_QUAST/11B_metaspades/
 ├── out/
-│   └── quast.11B.{JOBID}_{ARRAY_INDEX}.log
+│   └── metaspades_quast.11B.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── quast.11B.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── metaspades_quast.11B.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── report.txt
     ├── report.html
     ├── report.pdf
@@ -483,15 +515,12 @@ This document describes the expected directory structure and file outputs for ea
     ├── icarus.html
     ├── icarus_viewers/
     ├── basic_stats/
-    │   ├── cumulative_plot.pdf
-    │   ├── GC_content_plot.pdf
-    │   └── ERR81.all_contigs_GC_content_plot.pdf
     ├── contigs_reports/
     └── quast.log
 ```
 
 **Input Dependencies:**
-- `09_BINNING/09A_concoct_metaspades/ERR81.all_contigs.fna`
+- `09_BINNING/09B_concoct_metaspades/ERR9751998/ERR9751998.all_contigs.fna`
 
 ---
 
@@ -501,10 +530,10 @@ This document describes the expected directory structure and file outputs for ea
 ```
 12_CHECKM2/12A_megahit/
 ├── out/
-│   └── CHECKM2.12A.{JOBID}_{ARRAY_INDEX}.log
+│   └── megahit_checkm.12A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── CHECKM2.12A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── megahit_checkm.12A.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── quality_report.tsv            ← Primary quality metrics
     ├── protein_files/
     │   ├── 0.faa
@@ -516,10 +545,14 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `09_BINNING/09A_concoct_megahit/ERR81/fasta_bins/*.fa`
+- `09_BINNING/09A_concoct_megahit/ERR9751998/fasta_bins/*.fa`
 
 **Key Output:**
-- `quality_report.tsv`: Contains completeness, contamination, and quality scores for each bin
+- `quality_report.tsv`: Completeness, contamination, and quality scores for each bin
+
+**Quality Thresholds:**
+- High-quality MAG: >90% complete, <5% contamination
+- Medium-quality MAG: ≥50% complete, <10% contamination
 
 ---
 
@@ -529,10 +562,10 @@ This document describes the expected directory structure and file outputs for ea
 ```
 12_CHECKM2/12B_metaspades/
 ├── out/
-│   └── CHECKM2.12B.{JOBID}_{ARRAY_INDEX}.log
+│   └── metaspades_checkm.12B.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── CHECKM2.12B.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── metaspades_checkm.12B.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── quality_report.tsv            ← Primary quality metrics
     ├── protein_files/
     │   ├── 0.faa
@@ -544,10 +577,7 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `09_BINNING/09A_concoct_metaspades/ERR81/fasta_bins/*.fa`
-
-**Key Output:**
-- `quality_report.tsv`: Contains completeness, contamination, and quality scores for each bin
+- `09_BINNING/09B_concoct_metaspades/ERR9751998/fasta_bins/*.fa`
 
 ---
 
@@ -555,12 +585,12 @@ This document describes the expected directory structure and file outputs for ea
 **Purpose:** Taxonomic classification of reads with Kraken2/Bracken
 
 ```
-13_TAXONOMY/13_read_taxonomy/
+13_READ_TAXONOMY/
 ├── out/
 │   └── read_taxonomy.13.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
 │   └── read_taxonomy.13.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+└── ERR9751998/
     ├── kraken_results.txt
     ├── kraken_report.txt
     ├── bracken_results.txt
@@ -576,14 +606,19 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `05_BOWTIE2/ERR81_1.fastq.gz`
-- `05_BOWTIE2/ERR81_2.fastq.gz`
+- `05_BOWTIE2/ERR9751998_1.fastq.gz`
+- `05_BOWTIE2/ERR9751998_2.fastq.gz`
 
 **Key Outputs:**
 - `kraken_report.txt`: Hierarchical taxonomic report
-- `bracken_results.txt`: Re-estimated taxonomic abundances
+- `bracken_results.txt`: Re-estimated taxonomic abundances at species level
 - `human_reads/`: Reads classified as human (taxid 9606)
 - `nonhuman_reads/`: Reads classified as non-human
+
+**Process:**
+1. Kraken2 classification with memory-mapping
+2. Bracken abundance estimation
+3. Extract human/non-human reads using KrakenTools
 
 ---
 
@@ -591,12 +626,12 @@ This document describes the expected directory structure and file outputs for ea
 **Purpose:** Taxonomic classification of MEGAHIT contigs with Kraken2/Bracken
 
 ```
-14_CONTIG_TAXONOMY/14A_megahit_contig_taxonomy/
+14_CONTIG_TAXONOMY/14A_contig_taxonomy_megahit/
 ├── out/
 │   └── contig_taxonomy.14A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
 │   └── contig_taxonomy.14A.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+└── ERR9751998/
     ├── kraken_results.txt
     ├── kraken_report.txt
     ├── bracken_results.txt
@@ -609,7 +644,7 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `07_ASSEMBLY/07A_megahit_assembly/ERR81/final.contigs.fa`
+- `07_ASSEMBLY/07A_megahit_assembly/ERR9751998/final.contigs.fa`
 
 **Key Outputs:**
 - `kraken_report.txt`: Hierarchical taxonomic report for contigs
@@ -623,12 +658,12 @@ This document describes the expected directory structure and file outputs for ea
 **Purpose:** Taxonomic classification of metaSPAdes contigs with Kraken2/Bracken
 
 ```
-14_CONTIG_TAXONOMY/14B_metaspades_contig_taxonomy/
+14_CONTIG_TAXONOMY/14B_contig_taxonomy_metaspades/
 ├── out/
-│   └── contig_taxonomy.14B.{JOBID}_{ARRAY_INDEX}.log
+│   └── contig_taxonomy.14A.{JOBID}_{ARRAY_INDEX}.log
 ├── err/
-│   └── contig_taxonomy.14B.{JOBID}_{ARRAY_INDEX}.err
-└── ERR81/
+│   └── contig_taxonomy.14A.{JOBID}_{ARRAY_INDEX}.err
+└── ERR9751998/
     ├── kraken_results.txt
     ├── kraken_report.txt
     ├── bracken_results.txt
@@ -641,7 +676,7 @@ This document describes the expected directory structure and file outputs for ea
 ```
 
 **Input Dependencies:**
-- `07_ASSEMBLY/07B_metaspades_assembly/ERR81/contigs.fasta`
+- `07_ASSEMBLY/07B_metaspades_assembly/ERR9751998/contigs.fasta`
 
 **Key Outputs:**
 - `kraken_report.txt`: Hierarchical taxonomic report for contigs
@@ -654,44 +689,53 @@ This document describes the expected directory structure and file outputs for ea
 ## Complete Pipeline Flow Summary
 
 ```
-02_SRA_TOOLKIT (input data)
+01_WRAPPER_GEN
+    ↓
+02_SRA_TOOLKIT (parallel download)
     ↓
 03_FASTQC_BEFORE
     ↓
 04_TRIMMOMATIC
     ↓
-05_BOWTIE2 ────────────────────┐
-    ↓                          ↓
-06_FASTQC_AFTER           13_READ_TAXONOMY
+05_BOWTIE2 ──────────────────────┐
+    ↓                            ↓
+06_FASTQC_AFTER          13_READ_TAXONOMY
     ↓
-┌───┴───┐
-│       │
-07A     07B (assemblies)
-│       │
-↓       ↓
-14A     14B (contig taxonomy)
-│       │
-↓       ↓
-08A     08B (alignments)
-│       │
-↓       ↓
-09A     09B (CONCOCT binning)
-│       │
-↓───┬───↓
-    │
+┌───┴────┐
+│        │
+07A      07B (assemblies)
+│        │
+↓        ↓
+14A      14B (contig taxonomy)
+│        │
+↓        ↓
+08A      08B (alignments)
+│        │
+↓        ↓
+09A      09B (CONCOCT binning)
+│        │
+└───┬────┘
+    ↓
    10 (add bin numbers)
     │
-┌───┴───┐
-│       │
-11A     11B (QUAST)
-│       │
-12A     12B (CheckM2)
+┌───┴────┐
+│        │
+11A      11B (QUAST)
+│        │
+12A      12B (CheckM2)
 ```
+
+---
+
 ## Notes
 
 1. **Parallel Branches**: MEGAHIT (7A→8A→9A→11A/12A) and metaSPAdes (7B→8B→9B→11B/12B) run independently after JOB5
-2. **Temporary Files**: Some intermediate files (e.g., `result.sam`, `result.bam`) are deleted after processing
-3. **Index Files**: BWA creates index files alongside assemblies (`.amb`, `.ann`, `.bwt`, `.pac`, `.sa`)
-4. **CheckM2 Database**: Requires `$CHECKM2_DB` to be mounted and accessible
-5. **Kraken2 Database**: Requires `$KRAKEN2_DB` to be mounted with kmer distribution files for Bracken
-6. **Array Job Logs**: `{JOBID}` is the LSF job ID, `{ARRAY_INDEX}` is the array task index (1-based)
+2. **Temporary Files**: Intermediate files (`.sam`, unsorted `.bam`) are deleted after processing
+3. **Index Files**: BWA creates index files (`.amb`, `.ann`, `.bwt`, `.pac`, `.sa`) alongside assemblies
+4. **Database Requirements**:
+   - CheckM2 database at `$CHECKM2_DB`
+   - Kraken2 database at `$KRAKEN2_DB` with kmer distribution files for Bracken
+   - Human reference genome at `$REF_DB` for Bowtie2
+5. **Array Job Logs**: `{JOBID}` is the LSF job ID, `{ARRAY_INDEX}` is the array task index (1-based)
+6. **Memory-Mapping**: All Kraken2 jobs (JOB13, JOB14A, JOB14B) use `--memory-mapping` flag for efficient database access
+7. **Job 10**: Processes both MEGAHIT and metaSPAdes bins in a single array job per sample
