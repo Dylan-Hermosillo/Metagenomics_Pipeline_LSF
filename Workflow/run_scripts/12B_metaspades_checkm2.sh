@@ -15,7 +15,7 @@ names=($(cat ${XFILE}))
 NAME=${names[${JOBINDEX}]}
 
 # Output directory
-OUTDIR="${CHECKM_META}/${NAME}"
+OUTDIR="${CHECKM2_META}/${NAME}"
 mkdir -p $OUTDIR
 
 # Bins directory
