@@ -21,7 +21,7 @@ BIN_DIR="${CONCOCT_MEGA}/${NAME}/fasta_bins"
 
 if [[ -d "$BIN_DIR" ]]; then
     cd ${CONCOCT_MEGA}
-    touch ${NAME}.all_contigs.fna
+    touch ${NAME}/${NAME}.all_contigs.fna
     
     cd ${BIN_DIR}
     for file in *.fa; do
@@ -40,7 +40,7 @@ BIN_DIR="${CONCOCT_META}/${NAME}/fasta_bins"
 
 if [[ -d "$BIN_DIR" ]]; then
     cd ${CONCOCT_META}
-    touch ${NAME}.all_contigs.fna
+    touch ${NAME}/${NAME}.all_contigs.fna
     
     cd ${BIN_DIR}
     for file in *.fa; do

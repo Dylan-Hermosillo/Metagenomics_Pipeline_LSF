@@ -18,7 +18,7 @@ NAME=${names[${JOBINDEX}]}
 
 # Run FastQC After Trimming
 module load apptainer
-apptainer exec --bind ${FASTQC_AFTER}:${FASTQC_AFTER},${TRIMMED}:${TRIMMED} $FASTQC \
+apptainer exec --bind ${OUTDIR}:${OUTDIR},${FASTQC_AFTER}:${FASTQC_AFTER},${TRIMMED}:${TRIMMED} $FASTQC \
     fastqc --threads $JOB6_CPUS -o $FASTQC_AFTER/${NAME} \
     $TRIMMED/${NAME}_R1_paired.fastq.gz \
     $TRIMMED/${NAME}_R2_paired.fastq.gz
