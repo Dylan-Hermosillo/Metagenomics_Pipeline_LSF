@@ -188,24 +188,24 @@ export JOB6_TIME="02:00"
 # 07A MEGAHIT Assembly
 export JOB7A_CPUS=16
 export JOB7A_QUEUE="${QUEUE}"
-export JOB7A_MEMORY="16GB"
+export JOB7A_MEMORY="8GB"
 export JOB7A_MEMORY_GB=0.9  # MEGAHIT uses ratio (0.0-1.0) or exact value
 export JOB7A_TIME="06:00"
 # 07B metaSPAdes Assembly
 export JOB7B_CPUS=20
 export JOB7B_QUEUE="${QUEUE}"
-export JOB7B_MEMORY="128GB"
+export JOB7B_MEMORY="12GB"
 export JOB7B_MEMORY_GB=128  # metaSPAdes uses GB value
 export JOB7B_TIME="24:00"
 # 08A Align MEGAHIT
 export JOB8A_CPUS=8
 export JOB8A_QUEUE="${QUEUE}"
-export JOB8A_MEMORY="10GB"
+export JOB8A_MEMORY="6GB"
 export JOB8A_TIME="10:00"
 # 08B Align metaSPAdes
 export JOB8B_CPUS=8
 export JOB8B_QUEUE="${QUEUE}"
-export JOB8B_MEMORY="10GB"
+export JOB8B_MEMORY="6GB"
 export JOB8B_TIME="10:00"
 # 09A CONCOCT/BWA Binning - MEGAHIT
 export JOB9A_CPUS=24
@@ -246,18 +246,18 @@ export JOB12B_TIME="24:00"
 # 13 Read Taxonomy
 export JOB13_CPUS=24
 export JOB13_QUEUE="${QUEUE}"
-export JOB13_MEMORY="48GB"
+export JOB13_MEMORY="6GB"
 export JOB13_TIME="12:00"
 export KRAKEN2_KMER_SIZE=150  # Kraken2 k-mer size for Bracken
 # 14A Contig Taxonomy MEGAHIT
 export JOB14A_CPUS=24
 export JOB14A_QUEUE="${QUEUE}"
-export JOB14A_MEMORY="48GB"
+export JOB14A_MEMORY="8GB"
 export JOB14A_TIME="12:00"
 # 14B Contig Taxonomy metaSPAdes
 export JOB14B_CPUS=24
 export JOB14B_QUEUE="${QUEUE}"
-export JOB14B_MEMORY="48GB"
+export JOB14B_MEMORY="8GB"
 export JOB14B_TIME="12:00"
 
 
