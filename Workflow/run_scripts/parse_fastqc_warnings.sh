@@ -40,7 +40,7 @@ parse_fastqc_dir() {
             
             if [[ -n "$warnings" ]]; then
                 echo "Sample: $sample | Read: $read_pair" >> $REPORT_FILE
-                echo "$warnings" | awk '{print "  " $1 " - " $2}' >> $REPORT_FILE
+                echo "$warnings" | awk '{status=$1; $1=""; print "  " status " -" $0}' >> $REPORT_FILE
                 echo "" >> $REPORT_FILE
             fi
         fi
